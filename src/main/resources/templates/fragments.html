@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${title} + ' — Спорт ЧелГУ'">Спорт ЧелГУ</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<header th:fragment="header">
+    <div class="wrap">
+        <span class="title">Кружки и мероприятия</span>
+        <nav>
+            <a th:href="@{/}">Мероприятия</a>
+            <a th:href="@{/clubs}">Кружки</a>
+            <a th:href="@{/admin}">Редактирование</a>
+        </nav>
+    </div>
+</header>
+</body>
+</html>

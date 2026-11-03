@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Мероприятия')}"></head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+<div class="wrap">
+    <h1>Ближайшие мероприятия</h1>
+    <p class="muted" th:if="${upcoming.empty}">Запланированных мероприятий пока нет.</p>
+    <div class="item" th:each="e : ${upcoming}">
+        <h3 th:text="${e.name}"></h3>
+        <p><b>Дата:</b> <span th:text="${#temporals.format(e.eventDate, 'dd.MM.yyyy')}"></span>,
+           <b>время:</b> <span th:text="${#temporals.format(e.eventTime, 'HH:mm')}"></span></p>
+        <p><b>Место:</b> <span th:text="${e.place}"></span></p>
+        <p th:if="${e.requirements}"><b>Требования:</b> <span th:text="${e.requirements}"></span></p>
+        <p th:if="${e.contacts}"><b>Контакты:</b> <span th:text="${e.contacts}"></span></p>
+        <p th:text="${e.description}"></p>
+    </div>
+
+    <h2 th:if="${!past.empty}">Прошедшие мероприятия</h2>
+    <div class="item" th:each="e : ${past}">
+        <h3 th:text="${e.name}"></h3>
+        <p class="muted"><span th:text="${#temporals.format(e.eventDate, 'dd.MM.yyyy')}"></span>, <span th:text="${e.place}"></span></p>
+    </div>
+</div>
+<footer><div class="wrap">Спорт ЧелГУ</div></footer>
+</body>
+</html>

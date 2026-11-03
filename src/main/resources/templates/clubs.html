@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Кружки')}"></head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+<div class="wrap">
+    <h1>Кружки и секции</h1>
+    <p class="muted" th:if="${clubs.empty}">Кружков пока нет.</p>
+    <div class="item" th:each="c : ${clubs}">
+        <h3 th:text="${c.name}"></h3>
+        <p th:text="${c.description}"></p>
+        <p th:if="${c.requirements}"><b>Требования:</b> <span th:text="${c.requirements}"></span></p>
+        <div th:if="${!c.sessions.empty}">
+            <b>Расписание:</b>
+            <ul class="schedule">
+                <li th:each="s : ${c.sessions}"><span th:text="${s.dayTitle}"></span>, <span th:text="${s.timeRange}"></span></li>
+            </ul>
+        </div>
+        <p><b>Организатор:</b> <span th:text="${c.organizer}"></span></p>
+        <p th:if="${c.place}"><b>Место:</b> <span th:text="${c.place}"></span></p>
+        <p><b>Контакты:</b> <span th:text="${c.contacts}"></span></p>
+    </div>
+</div>
+<footer><div class="wrap">Спорт ЧелГУ</div></footer>
+</body>
+</html>
