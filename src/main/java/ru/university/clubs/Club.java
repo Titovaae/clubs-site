@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,12 +17,11 @@ public class Club {
 
     @NotBlank(message = "Укажите название")
     @Size(max = 150, message = "Не более 150 символов")
-    @Column(length = 150)
     private String name;
 
     @NotBlank(message = "Укажите описание")
     @Size(max = 2000, message = "Не более 2000 символов")
-    @Column(length = 2000)
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     @Size(max = 2000, message = "Не более 2000 символов")
@@ -31,14 +31,20 @@ public class Club {
     @Size(max = 255, message = "Не более 255 символов")
     private String place;
 
-    @NotBlank(message = "Укажите организатора")
-    @Size(max = 150, message = "Не более 150 символов")
-    @Column(length = 150)
-    private String organizer;
+    /** Организатор: его ФИО и контакты показываются в карточке кружка. */
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "owner_id")
+    private AppUser owner;
 
-    @NotBlank(message = "Укажите контакты")
-    @Size(max = 255, message = "Не более 255 символов")
-    private String contacts;
+    /** Дата и время последнего успешного редактирования. */
+    private LocalDateTime updatedAt;
+
+    @Size(max = 1000, message = "Не более 1000 символов")
+    @Column(length = 1000)
+    private String autoReply;
+
+    /** true — автоответ отправляется сразу при поступлении заявки. */
+    private boolean autoReplySend;
 
     @OneToMany(mappedBy = "club", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @OrderBy("dayOfWeek ASC, startTime ASC")
@@ -56,8 +62,12 @@ public class Club {
     public void setRequirements(String requirements) { this.requirements = requirements; }
     public String getPlace() { return place; }
     public void setPlace(String place) { this.place = place; }
-    public String getOrganizer() { return organizer; }
-    public void setOrganizer(String organizer) { this.organizer = organizer; }
-    public String getContacts() { return contacts; }
-    public void setContacts(String contacts) { this.contacts = contacts; }
+    public AppUser getOwner() { return owner; }
+    public void setOwner(AppUser owner) { this.owner = owner; }
+    public LocalDateTime getUpdatedAt() { return updatedAt; }
+    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
+    public String getAutoReply() { return autoReply; }
+    public void setAutoReply(String autoReply) { this.autoReply = autoReply; }
+    public boolean isAutoReplySend() { return autoReplySend; }
+    public void setAutoReplySend(boolean autoReplySend) { this.autoReplySend = autoReplySend; }
 }

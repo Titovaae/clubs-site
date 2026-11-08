@@ -19,7 +19,8 @@
     <h2 th:if="${!past.empty}">Прошедшие мероприятия</h2>
     <div class="item" th:each="e : ${past}">
         <h3 th:text="${e.name}"></h3>
-        <p class="muted"><span th:text="${#temporals.format(e.eventDate, 'dd.MM.yyyy')}"></span>, <span th:text="${e.place}"></span></p>
+        <p class="muted"><span th:text="${#temporals.format(e.eventDate, 'dd.MM.yyyy')}"></span>,
+           <span th:text="${e.place}"></span></p>
     </div>
 </div>
 <footer><div class="wrap">Спорт ЧелГУ</div></footer>

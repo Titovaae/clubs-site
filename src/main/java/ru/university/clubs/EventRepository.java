@@ -10,5 +10,5 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
     List<Event> findByEventDateLessThanOrderByEventDateDesc(LocalDate date);
 
-    List<Event> findAllByOrderByEventDateDesc();
+    List<Event> findByOwnerIdOrderByEventDateDesc(Long ownerId);
 }

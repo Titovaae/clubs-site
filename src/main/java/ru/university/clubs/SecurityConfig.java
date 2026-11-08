@@ -1,15 +1,11 @@
 package ru.university.clubs;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 
 @Configuration
 public class SecurityConfig {
@@ -18,11 +14,21 @@ public class SecurityConfig {
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(a -> a
-                .requestMatchers("/admin/**").authenticated()
+                .requestMatchers("/admin/**").hasRole("ADMIN")
+                .requestMatchers("/organizer/**").hasRole("ORGANIZER")
+                .requestMatchers("/student/**").hasRole("STUDENT")
                 .anyRequest().permitAll())
             .formLogin(f -> f
                 .loginPage("/login")
-                .defaultSuccessUrl("/admin", true)
+                .successHandler((request, response, auth) -> {
+                    String target = "/";
+                    for (var authority : auth.getAuthorities()) {
+                        if (authority.getAuthority().equals("ROLE_ADMIN")) target = "/admin/users";
+                        if (authority.getAuthority().equals("ROLE_ORGANIZER")) target = "/organizer";
+                        if (authority.getAuthority().equals("ROLE_STUDENT")) target = "/clubs";
+                    }
+                    response.sendRedirect(request.getContextPath() + target);
+                })
                 .permitAll())
             .logout(l -> l.logoutSuccessUrl("/"));
         return http.build();
@@ -31,13 +37,5 @@ public class SecurityConfig {
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    UserDetailsService userDetailsService(@Value("${app.admin.username}") String username,
-                                          @Value("${app.admin.password}") String password,
-                                          PasswordEncoder encoder) {
-        return new InMemoryUserDetailsManager(
-            User.withUsername(username).password(encoder.encode(password)).roles("ADMIN").build());
     }
 }

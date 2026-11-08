@@ -2,10 +2,12 @@ package ru.university.clubs;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,19 +16,46 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Заполняет пустую базу тестовыми данными.
- * Кружки взяты со страницы https://www.csu.ru/structurecontacts/structure/sport/
- * Мероприятия придуманы для проверки сайта.
- * Отключить: app.seed-test-data=false в application.properties.
+ * Тестовые данные. Кружки, тренеры, контакты и места взяты со страницы Спортивного клуба
+ * на сайте ЧелГУ (csu.ru). Расписания, мероприятия и учётные записи придуманы для проверки сайта.
+ * Тренеры создаются как организаторы (пароль organizer123), плюс тестовый студент student / student123.
+ * Отключается настройкой app.seed-test-data=false.
  */
 @Component
 public class TestDataLoader implements CommandLineRunner {
-    private static final String CLUB_CONTACTS = "Спортивный клуб ЧелГУ: +7 (351) 799-70-51, marinasport2015@yandex.ru";
-    private static final String GAMES_NOTE = " Сборные команды университета по спортивным играм тренируются в спортзале 3 учебного корпуса (пр. Победы, 162-в).";
+    private static final String CONTACTS = "+7 (351) 799-70-51, marinasport2015@yandex.ru";
+    private static final String BASE = "Занятия проходят в форме секционных занятий Спортивного клуба ЧелГУ. "
+        + "Студентам, проявившим способности в спорте, предоставляется возможность стать членами сборной команды "
+        + "университета и выступать на соревнованиях.";
+
+    private static final String PLACE_1 = "1 учебный корпус, ул. Братьев Кашириных, 129";
+    private static final String PLACE_2 = "Универсальный спортзал, 2 учебный корпус, ул. Молодогвардейцев, 70-б";
+    private static final String PLACE_3 = "Спортзал, 3 учебный корпус, пр. Победы, 162-в";
+    private static final String PLACE_4 = "4 учебный корпус, ул. Молодогвардейцев, 57а";
 
     private static final String[] DAYS = {"Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"};
 
-    /** Тестовое расписание (придумано для проверки сайта): дни и время «начало-конец». */
+    /** ФИО тренера -> логин организатора. */
+    private static final Map<String, String> TRAINERS = new LinkedHashMap<>();
+    static {
+        TRAINERS.put("Потехин Игорь Алексеевич", "potehin");
+        TRAINERS.put("Матина Залия Имамдиновна", "matina");
+        TRAINERS.put("Полосин Дмитрий Евгеньевич", "polosin");
+        TRAINERS.put("Бардина Марина Юрьевна", "bardina");
+        TRAINERS.put("Хадиева Разиля Тагировна", "hadieva");
+        TRAINERS.put("Алёшкин Вадим Альбертович", "aleshkin");
+        TRAINERS.put("Макарьев Иван Валерьевич", "makarev");
+        TRAINERS.put("Попков Владимир Ильич", "popkov");
+        TRAINERS.put("Маркелов Иван Петрович", "markelov");
+        TRAINERS.put("Панькин Виктор Ефимович", "pankin_v");
+        TRAINERS.put("Курдаков Сергей Алексеевич", "kurdakov");
+        TRAINERS.put("Кооль Мария Викторовна", "kool");
+        TRAINERS.put("Байрамов Азат Тагирович", "bayramov");
+        TRAINERS.put("Яремин Дмитрий", "yaremin");
+        TRAINERS.put("Панькин Иван Валерьевич", "pankin_i");
+    }
+
+    /** Тестовое расписание: дни и время «начало-конец». */
     private static final Map<String, String> SCHEDULE = new LinkedHashMap<>();
     static {
         SCHEDULE.put("Лёгкая атлетика", "Пн Ср 17:00-18:30");
@@ -51,39 +80,28 @@ public class TestDataLoader implements CommandLineRunner {
 
     private final ClubRepository clubs;
     private final EventRepository events;
+    private final AppUserRepository users;
     private final ClubService clubService;
+    private final PasswordEncoder encoder;
     private final boolean enabled;
 
-    public TestDataLoader(ClubRepository clubs, EventRepository events, ClubService clubService,
+    public TestDataLoader(ClubRepository clubs, EventRepository events, AppUserRepository users,
+                          ClubService clubService, PasswordEncoder encoder,
                           @Value("${app.seed-test-data:true}") boolean enabled) {
-        this.clubService = clubService;
         this.clubs = clubs;
         this.events = events;
+        this.users = users;
+        this.clubService = clubService;
+        this.encoder = encoder;
         this.enabled = enabled;
     }
 
     @Override
     public void run(String... args) {
         if (!enabled) return;
+        createTestStudent();
         if (clubs.count() == 0) {
-            club("Лёгкая атлетика", "Секционные занятия по лёгкой атлетике. Один из самых востребованных у студентов видов спорта в Спортивном клубе ЧелГУ.", "Бардина Марина Юрьевна");
-            club("Волейбол (мужская команда)", "Секционные занятия и тренировки мужской сборной ЧелГУ по волейболу." + GAMES_NOTE, "Макарьев Иван Валерьевич");
-            club("Волейбол (женская команда)", "Секционные занятия и тренировки женской сборной ЧелГУ по волейболу." + GAMES_NOTE, "Попков Владимир Ильич");
-            club("Баскетбол", "Секционные занятия и тренировки мужской и женской сборных ЧелГУ по баскетболу." + GAMES_NOTE, "Маркелов Иван Петрович");
-            club("Мини-футбол (мужская команда)", "Секционные занятия и тренировки мужской сборной ЧелГУ по мини-футболу." + GAMES_NOTE, "Курдаков Сергей Алексеевич");
-            club("Мини-футбол (женская команда)", "Секционные занятия и тренировки женской сборной ЧелГУ по мини-футболу." + GAMES_NOTE, "Байрамов Азат Тагирович");
-            club("Настольный теннис", "Секционные занятия по настольному теннису. Сектор для игры оборудован в манеже 4 учебного корпуса (ул. Молодогвардейцев, 57а).", "Матина Залия Имамдиновна");
-            club("Шахматы и шашки", "Занятия шахматного клуба ЧелГУ по шахматам и шашкам. Клуб находится в 1 учебном корпусе (ул. Братьев Кашириных, 129).", "Полосин Дмитрий Евгеньевич");
-            club("Атлетическая гимнастика", "Занятия в тренажёрном зале 4 учебного корпуса (ул. Молодогвардейцев, 57а): силовая подготовка и атлетическая гимнастика.", "Хадиева Разиля Тагировна");
-            club("Плавание", "Секционные занятия по плаванию в Спортивном клубе ЧелГУ.", "Хадиева Разиля Тагировна");
-            club("Лыжные гонки", "Секционные занятия по лыжной подготовке. В 1 учебном корпусе есть лыжероллерная трасса протяжённостью 2115 м.", "Панькин Виктор Ефимович");
-            club("Армспорт", "Секция армрестлинга «Урал» в 4 учебном корпусе. Занимаются в том числе студенты с инвалидностью.", "Алёшкин Вадим Альбертович");
-            club("Прикладная самооборона", "Секционные занятия по прикладной самообороне в универсальном зале 2 учебного корпуса (ул. Молодогвардейцев, 70-б).", "Потехин Игорь Алексеевич");
-            club("Рукопашный бой", "Секционные занятия по рукопашному бою в универсальном зале 2 учебного корпуса (ул. Молодогвардейцев, 70-б).", "Яремин Дмитрий");
-            club("Бадминтон", "Секционные занятия по бадминтону в Спортивном клубе ЧелГУ.", "Кооль Мария Викторовна");
-            club("Дартс", "Секционные занятия по дартсу в Спортивном клубе ЧелГУ.", "Матина Залия Имамдиновна");
-            club("Пауэрлифтинг", "Секционные занятия по пауэрлифтингу в Спортивном клубе ЧелГУ.", "Макарьев Иван Валерьевич");
-            club("Многоборье ГТО", "Подготовка к выполнению нормативов комплекса ГТО.", "Панькин Иван Валерьевич");
+            seedClubs();
         }
         // Расписание добавляется кружкам с тестовыми названиями, у которых его ещё нет
         for (Club c : clubs.findAll()) {
@@ -93,12 +111,112 @@ public class TestDataLoader implements CommandLineRunner {
             }
         }
         if (events.count() == 0) {
-            LocalDate today = LocalDate.now();
-            event("Открытая тренировка по волейболу (тест)", "Пробное занятие для всех желающих. Можно прийти в спортивной форме и сменной обуви.", today.plusDays(3), LocalTime.of(18, 0), "Спортзал, 3 учебный корпус, пр. Победы, 162-в");
-            event("Турнир по настольному теннису (тест)", "Внутривузовский турнир среди студентов. Регистрация перед началом игр.", today.plusDays(10), LocalTime.of(15, 30), "Манеж, 4 учебный корпус, ул. Молодогвардейцев, 57а");
-            event("Шахматный турнир (тест)", "Турнир по быстрым шахматам среди студентов первого и второго курсов.", today.plusDays(17), LocalTime.of(14, 0), "1 учебный корпус, ул. Братьев Кашириных, 129");
-            event("Кросс ЧелГУ (тест)", "Осенний кросс на лыжероллерной трассе. Итоги подведут в тот же день.", today.minusDays(14), LocalTime.of(12, 0), "1 учебный корпус, ул. Братьев Кашириных, 129");
+            seedEvents();
         }
+    }
+
+    private void createTestStudent() {
+        if (users.existsByUsername("student")) return;
+        AppUser s = new AppUser();
+        s.setUsername("student");
+        s.setPassword(encoder.encode("student123"));
+        s.setRole(Role.STUDENT);
+        s.setFullName("Иванов Иван Иванович");
+        s.setGroupName("ПМИ-101");
+        s.setCourse(1);
+        users.save(s);
+    }
+
+    private AppUser organizer(String fullName) {
+        String username = TRAINERS.get(fullName);
+        return users.findByUsername(username).orElseGet(() -> {
+            AppUser o = new AppUser();
+            o.setUsername(username);
+            o.setPassword(encoder.encode("organizer123"));
+            o.setRole(Role.ORGANIZER);
+            o.setFullName(fullName);
+            o.setContacts(CONTACTS);
+            return users.save(o);
+        });
+    }
+
+    private void seedClubs() {
+        club("Прикладная самооборона", "Потехин Игорь Алексеевич",
+            "Курс прикладной самообороны: базовые приёмы защиты, безопасное поведение и физическая подготовка.", PLACE_2);
+        club("Настольный теннис", "Матина Залия Имамдиновна",
+            "Секция настольного тенниса для студентов любого уровня подготовки: от первых ударов до участия в турнирах.", PLACE_4);
+        club("Шахматы и шашки", "Полосин Дмитрий Евгеньевич",
+            "Занятия шахматами и шашками в шахматном клубе университета: разбор партий, тренировочные игры и подготовка к турнирам.", PLACE_1 + " (шахматный клуб)");
+        club("Лёгкая атлетика", "Бардина Марина Юрьевна",
+            "Бег, прыжки и метания: общая физическая подготовка и подготовка к соревнованиям по лёгкой атлетике.", null);
+        club("Атлетическая гимнастика", "Хадиева Разиля Тагировна",
+            "Силовая и общая физическая подготовка в тренажёрном зале университета.", "Тренажёрный зал, " + PLACE_4);
+        club("Армспорт", "Алёшкин Вадим Альбертович",
+            "Секция армрестлинга «Урал». Занимаются в том числе студенты с инвалидностью, среди воспитанников есть призёры российских и международных соревнований.", "Тренажёрный зал, " + PLACE_4);
+        club("Волейбол (мужская команда)", "Макарьев Иван Валерьевич",
+            "Тренировки мужской сборной команды университета по волейболу.", PLACE_3);
+        club("Волейбол (женская команда)", "Попков Владимир Ильич",
+            "Тренировки женской сборной команды университета по волейболу.", PLACE_3);
+        club("Баскетбол", "Маркелов Иван Петрович",
+            "Тренировки мужской и женской сборных команд университета по баскетболу.", PLACE_3);
+        club("Лыжные гонки", "Панькин Виктор Ефимович",
+            "Лыжная подготовка: зимой на лыжне, в тёплое время года на лыжероллерной трассе протяжённостью 2115 м.", "Лыжероллерная трасса, " + PLACE_1);
+        club("Плавание", "Хадиева Разиля Тагировна",
+            "Секция плавания для студентов: обучение и совершенствование техники.", null);
+        club("Мини-футбол (мужская команда)", "Курдаков Сергей Алексеевич",
+            "Тренировки мужской сборной команды университета по мини-футболу.", PLACE_3);
+        club("Бадминтон", "Кооль Мария Викторовна",
+            "Секция бадминтона для начинающих и опытных игроков.", PLACE_2);
+        club("Мини-футбол (женская команда)", "Байрамов Азат Тагирович",
+            "Тренировки женской сборной команды университета по мини-футболу.", PLACE_3);
+        club("Рукопашный бой", "Яремин Дмитрий",
+            "Секция рукопашного боя: техника ударов и захватов, физическая подготовка.", PLACE_2);
+        club("Пауэрлифтинг", "Макарьев Иван Валерьевич",
+            "Силовое троеборье: приседания, жим лёжа и становая тяга под руководством тренера.", "Тяжелоатлетический зал, " + PLACE_4);
+        club("Многоборье ГТО", "Панькин Иван Валерьевич",
+            "Подготовка к выполнению нормативов комплекса ГТО.", null);
+        club("Дартс", "Матина Залия Имамдиновна",
+            "Секция дартса: техника броска и тренировочные матчи.", null);
+    }
+
+    private void club(String name, String trainer, String about, String place) {
+        Club c = new Club();
+        c.setName(name);
+        c.setOwner(organizer(trainer));
+        c.setDescription(about + " " + BASE);
+        c.setPlace(place);
+        c.setUpdatedAt(LocalDateTime.now());
+        // пример автоответа: у лёгкой атлетики отправляется сразу, у остальных — по кнопке
+        c.setAutoReply("Спасибо за заявку в кружок «" + name + "»! Приходите на ближайшую тренировку по расписанию, "
+            + "при себе иметь спортивную форму и сменную обувь.");
+        c.setAutoReplySend(name.equals("Лёгкая атлетика"));
+        clubs.save(c);
+    }
+
+    private void seedEvents() {
+        AppUser owner = organizer("Бардина Марина Юрьевна");
+        LocalDate today = LocalDate.now();
+        event(owner, "Открытая тренировка по волейболу (тест)", "Приглашаем всех желающих попробовать себя в волейболе. Тренировку проведёт тренер сборной.",
+            today.plusDays(3), LocalTime.of(18, 30), PLACE_3);
+        event(owner, "Турнир по настольному теннису (тест)", "Внутривузовский турнир среди студентов. Игры проходят по олимпийской системе.",
+            today.plusDays(10), LocalTime.of(15, 30), PLACE_4);
+        event(owner, "Шахматный турнир среди студентов (тест)", "Турнир в шахматном клубе университета, контроль времени — 15 минут на партию.",
+            today.plusDays(17), LocalTime.of(16, 0), PLACE_1 + " (шахматный клуб)");
+        event(owner, "День здоровья на лыжероллерной трассе (тест)", "Совместная тренировка и забеги для всех желающих.",
+            today.minusDays(14), LocalTime.of(12, 0), "Лыжероллерная трасса, " + PLACE_1);
+    }
+
+    private void event(AppUser owner, String name, String about, LocalDate date, LocalTime time, String place) {
+        Event e = new Event();
+        e.setOwner(owner);
+        e.setName(name);
+        e.setDescription(about);
+        e.setEventDate(date);
+        e.setEventTime(time);
+        e.setRequirements("Спортивная форма и сменная обувь.");
+        e.setPlace(place);
+        e.setContacts(CONTACTS);
+        events.save(e);
     }
 
     private static List<ClubSession> parseSchedule(String spec) {
@@ -113,40 +231,5 @@ public class TestDataLoader implements CommandLineRunner {
             list.add(s);
         }
         return list;
-    }
-
-    private void club(String name, String description, String organizer) {
-        Club c = new Club();
-        c.setName(name);
-        c.setDescription(description);
-        c.setOrganizer(organizer);
-        c.setContacts(CLUB_CONTACTS);
-        c.setPlace(placeFor(name));
-        clubs.save(c);
-    }
-
-    private static String placeFor(String name) {
-        if (name.startsWith("Волейбол") || name.startsWith("Баскетбол") || name.startsWith("Мини-футбол"))
-            return "Спортзал, 3 учебный корпус, пр. Победы, 162-в";
-        if (name.startsWith("Настольный теннис") || name.startsWith("Армспорт"))
-            return "4 учебный корпус, ул. Молодогвардейцев, 57а";
-        if (name.startsWith("Атлетическая"))
-            return "Тренажёрный зал, 4 учебный корпус, ул. Молодогвардейцев, 57а";
-        if (name.startsWith("Шахматы") || name.startsWith("Лыжные"))
-            return "1 учебный корпус, ул. Братьев Кашириных, 129";
-        if (name.startsWith("Прикладная") || name.startsWith("Рукопашный"))
-            return "Универсальный зал, 2 учебный корпус, ул. Молодогвардейцев, 70-б";
-        return null;
-    }
-
-    private void event(String name, String description, LocalDate date, LocalTime time, String place) {
-        Event e = new Event();
-        e.setName(name);
-        e.setDescription(description);
-        e.setEventDate(date);
-        e.setEventTime(time);
-        e.setPlace(place);
-        e.setContacts(CLUB_CONTACTS);
-        events.save(e);
     }
 }

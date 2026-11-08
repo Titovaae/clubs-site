@@ -18,12 +18,11 @@ public class Event {
 
     @NotBlank(message = "Укажите название")
     @Size(max = 150, message = "Не более 150 символов")
-    @Column(length = 150)
     private String name;
 
     @NotBlank(message = "Укажите описание")
     @Size(max = 2000, message = "Не более 2000 символов")
-    @Column(length = 2000)
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     @NotNull(message = "Укажите дату")
@@ -38,12 +37,19 @@ public class Event {
     @Column(length = 2000)
     private String requirements;
 
-    @Size(max = 255, message = "Не более 255 символов")
-    private String contacts;
-
     @NotBlank(message = "Укажите место")
     @Size(max = 255, message = "Не более 255 символов")
     private String place;
+
+    @Size(max = 255, message = "Не более 255 символов")
+    private String contacts;
+
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "owner_id")
+    private AppUser owner;
+
+    public AppUser getOwner() { return owner; }
+    public void setOwner(AppUser owner) { this.owner = owner; }
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -57,8 +63,8 @@ public class Event {
     public void setEventTime(LocalTime eventTime) { this.eventTime = eventTime; }
     public String getRequirements() { return requirements; }
     public void setRequirements(String requirements) { this.requirements = requirements; }
-    public String getContacts() { return contacts; }
-    public void setContacts(String contacts) { this.contacts = contacts; }
     public String getPlace() { return place; }
     public void setPlace(String place) { this.place = place; }
+    public String getContacts() { return contacts; }
+    public void setContacts(String contacts) { this.contacts = contacts; }
 }

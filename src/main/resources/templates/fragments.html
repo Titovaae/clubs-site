@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:fragment="head(title)">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,7 +13,16 @@
         <nav>
             <a th:href="@{/}">Мероприятия</a>
             <a th:href="@{/clubs}">Кружки</a>
-            <a th:href="@{/admin}">Редактирование</a>
+            <a sec:authorize="hasRole('STUDENT')" th:href="@{/student/notifications}">Уведомления</a>
+            <a sec:authorize="hasRole('ORGANIZER')" th:href="@{/organizer}">Мои кружки и мероприятия</a>
+            <a sec:authorize="hasRole('ORGANIZER')" th:href="@{/organizer/requests}">Заявки</a>
+            <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin/users}">Пользователи</a>
+            <a sec:authorize="!isAuthenticated()" th:href="@{/login}">Войти</a>
+            <a sec:authorize="!isAuthenticated()" th:href="@{/register}">Регистрация</a>
+            <span sec:authorize="isAuthenticated()">
+                <span class="muted" sec:authentication="name"></span>
+                <form class="inline" th:action="@{/logout}" method="post"><button type="submit">Выйти</button></form>
+            </span>
         </nav>
     </div>
 </header>

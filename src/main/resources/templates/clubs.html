@@ -6,20 +6,24 @@
 <div class="wrap">
     <h1>Кружки и секции</h1>
     <p class="muted" th:if="${clubs.empty}">Кружков пока нет.</p>
-    <div class="item" th:each="c : ${clubs}">
-        <h3 th:text="${c.name}"></h3>
-        <p th:text="${c.description}"></p>
-        <p th:if="${c.requirements}"><b>Требования:</b> <span th:text="${c.requirements}"></span></p>
-        <div th:if="${!c.sessions.empty}">
-            <b>Расписание:</b>
-            <ul class="schedule">
-                <li th:each="s : ${c.sessions}"><span th:text="${s.dayTitle}"></span>, <span th:text="${s.timeRange}"></span></li>
-            </ul>
+
+    <a class="card" th:each="c : ${clubs}" th:href="@{/clubs/{id}(id=${c.id})}">
+        <div class="thumb"></div>
+        <div class="card-body">
+            <h3 th:text="${c.name}"></h3>
+            <p th:text="${#strings.abbreviate(c.description, 300)}"></p>
+            <p class="small" th:if="${c.updatedAt != null}">Обновлено: <span th:text="${#temporals.format(c.updatedAt, 'dd.MM.yyyy')}"></span></p>
         </div>
-        <p><b>Организатор:</b> <span th:text="${c.organizer}"></span></p>
-        <p th:if="${c.place}"><b>Место:</b> <span th:text="${c.place}"></span></p>
-        <p><b>Контакты:</b> <span th:text="${c.contacts}"></span></p>
-    </div>
+    </a>
+
+    <p class="pager" th:if="${totalPages > 1}">
+        <a th:if="${page > 1}" th:href="@{/clubs(page=${page - 1})}">← Назад</a>
+        <span th:each="p : ${#numbers.sequence(1, totalPages)}">
+            <b th:if="${p == page}" th:text="${p}"></b>
+            <a th:unless="${p == page}" th:href="@{/clubs(page=${p})}" th:text="${p}"></a>
+        </span>
+        <a th:if="${page < totalPages}" th:href="@{/clubs(page=${page + 1})}">Вперёд →</a>
+    </p>
 </div>
 <footer><div class="wrap">Спорт ЧелГУ</div></footer>
 </body>
