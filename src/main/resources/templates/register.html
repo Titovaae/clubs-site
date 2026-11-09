@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Регистрация')}"></head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+
+<div class="hero" style="padding-bottom: 40px;">
+    <div class="wrap">
+        <div class="breadcrumbs">
+            <a href="/">Главная</a> &nbsp;&gt;&nbsp; Регистрация
+        </div>
+        <h1 class="auth-title">Создать аккаунт</h1>
+    </div>
+</div>
+
+<div class="auth-wrapper">
+    <form th:action="@{/register}" th:object="${userForm}" method="post">
+
+        <div th:if="${#fields.hasGlobalErrors()}" class="error" style="margin-bottom: 20px;">
+            <p th:each="err : ${#fields.globalErrors()}" th:text="${err}" style="margin: 0;">Ошибка</p>
+        </div>
+
+        <div>
+            <label for="fullName">ФИО <span class="label-hint">(Иванов Иван)</span></label>
+            <input type="text" id="fullName" th:field="*{fullName}" placeholder="Введите ваше имя" required>
+            <span style="color: red; font-size: 0.85rem; margin-top: -15px; display: block; margin-bottom: 15px;" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}"></span>
+        </div>
+
+        <div>
+            <label for="username">Логин <span class="label-hint">(Латинские буквы)</span></label>
+            <input type="text" id="username" th:field="*{username}" placeholder="Придумайте логин" required>
+            <span style="color: red; font-size: 0.85rem; margin-top: -15px; display: block; margin-bottom: 15px;" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
+        </div>
+
+        <div>
+            <label for="password">Пароль</label>
+            <input type="password" id="password" th:field="*{password}" placeholder="Минимум 5 символов" required>
+            <span style="color: red; font-size: 0.85rem; margin-top: -15px; display: block; margin-bottom: 15px;" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+        </div>
+
+        <div>
+            <label for="groupName">Группа <span class="label-hint">(Например: ПРИ-101)</span></label>
+            <input type="text" id="groupName" th:field="*{groupName}" placeholder="Введите номер группы" required>
+            <span style="color: red; font-size: 0.85rem; margin-top: -15px; display: block; margin-bottom: 15px;" th:if="${#fields.hasErrors('groupName')}" th:errors="*{groupName}"></span>
+        </div>
+
+        <div>
+            <label for="course">Курс</label>
+            <input type="number" id="course" th:field="*{course}" placeholder="Введите курс"
+                   min="1" max="6" required maxlength="1"
+                   oninput="if(this.value > 6) this.value = 6; if(this.value < 1 && this.value !== '') this.value = 1;">
+            <span style="color: red; font-size: 0.85rem; margin-top: -15px; display: block; margin-bottom: 15px;" th:if="${#fields.hasErrors('course')}" th:errors="*{course}"></span>
+        </div>
+
+        <button type="submit">Зарегистрироваться</button>
+
+        <p class="auth-link">
+            Уже есть аккаунт? <a th:href="@{/login}">Войти</a>
+        </p>
+    </form>
+</div>
+
+<footer><div class="wrap">Спорт ЧелГУ</div></footer>
+</body>
+</html>

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 /** Администратор: создание и просмотр пользователей. */
 @Controller
 @RequestMapping("/admin")
-public class AdminController {
+public class AdminController { // Убрали <UserForm> отсюда!
     private final UserService userService;
     private final AppUserRepository users;
 
@@ -35,6 +35,7 @@ public class AdminController {
     @GetMapping("/users/new")
     public String form(Model model) {
         model.addAttribute("userForm", new UserForm());
+        // Исправляем на нашу правильную Role
         model.addAttribute("roles", Role.values());
         return "admin/user-form";
     }

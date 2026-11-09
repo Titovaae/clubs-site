@@ -23,14 +23,14 @@ public class PublicController {
     private final ClubRepository clubs;
     private final EventRepository events;
     private final AppUserRepository users;
-    private final ClubRequestRepository requests;
+    //private final ClubRequestRepository requests;
 
     public PublicController(ClubRepository clubs, EventRepository events,
-                            AppUserRepository users, ClubRequestRepository requests) {
+                            AppUserRepository users) {
         this.clubs = clubs;
         this.events = events;
         this.users = users;
-        this.requests = requests;
+        //this.requests = requests;
     }
 
     @GetMapping("/")
@@ -83,7 +83,7 @@ public class PublicController {
         boolean applied = false;
         if (principal != null) {
             AppUser u = users.findByUsername(principal.getName()).orElse(null);
-            applied = u != null && u.getRole() == Role.STUDENT && requests.existsByClubIdAndStudentId(id, u.getId());
+            applied = u != null && u.getRole() == Role.STUDENT;
         }
         model.addAttribute("applied", applied);
         return "club";

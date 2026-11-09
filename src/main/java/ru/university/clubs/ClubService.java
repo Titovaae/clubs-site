@@ -11,13 +11,13 @@ import java.util.List;
 @Service
 public class ClubService {
     private final ClubRepository clubs;
-    private final ClubRequestRepository requests;
-    private final NotificationRepository notifications;
+    //private final ClubRequestRepository requests;
+    //private final NotificationRepository notifications;
 
-    public ClubService(ClubRepository clubs, ClubRequestRepository requests, NotificationRepository notifications) {
+    public ClubService(ClubRepository clubs) {
         this.clubs = clubs;
-        this.requests = requests;
-        this.notifications = notifications;
+        //this.requests = requests;
+        //this.notifications = notifications;
     }
 
     // ---------- Кружки ----------
@@ -55,7 +55,7 @@ public class ClubService {
     public void delete(Long id, AppUser owner) {
         Club club = clubs.findById(id).orElseThrow();
         checkOwner(club, owner);
-        requests.deleteByClubId(id);
+        //requests.deleteByClubId(id);
         clubs.delete(club);
     }
 
@@ -67,47 +67,47 @@ public class ClubService {
     }
 
     // ---------- Заявки ----------
-    @Transactional
-    public void apply(Long clubId, AppUser student) {
-        Club club = clubs.findById(clubId).orElseThrow();
-        if (requests.existsByClubIdAndStudentId(clubId, student.getId())) return;
-        ClubRequest r = new ClubRequest();
-        r.setClub(club);
-        r.setStudent(student);
-        r.setCreatedAt(LocalDateTime.now());
-        requests.save(r);
-        notify(student, "Заявка в кружок «" + club.getName() + "» отправлена организатору.");
-        if (club.isAutoReplySend() && hasText(club.getAutoReply())) {
-            answer(r, club.getAutoReply());
-        }
-    }
-
-    /** Ответ организатора: свой текст (auto = false) или автоответ кружка (auto = true). */
-    @Transactional
-    public void reply(Long requestId, AppUser organizer, String text, boolean auto) {
-        ClubRequest r = requests.findById(requestId).orElseThrow();
-        checkOwner(r.getClub(), organizer);
-        if (r.isAnswered()) return;
-        String message = auto ? r.getClub().getAutoReply() : text;
-        if (!hasText(message)) return;
-        answer(r, message.trim());
-    }
-
-    private void answer(ClubRequest r, String message) {
-        r.setReplyText(message);
-        r.setRepliedAt(LocalDateTime.now());
-        requests.save(r);
-        notify(r.getStudent(), "Ответ организатора кружка «" + r.getClub().getName() + "» ("
-            + r.getClub().getOwner().getFullName() + "): " + message);
-    }
-
-    private void notify(AppUser user, String text) {
-        Notification n = new Notification();
-        n.setUser(user);
-        n.setText(text);
-        n.setCreatedAt(LocalDateTime.now());
-        notifications.save(n);
-    }
+//    @Transactional
+//    public void apply(Long clubId, AppUser student) {
+//        Club club = clubs.findById(clubId).orElseThrow();
+//        if (requests.existsByClubIdAndStudentId(clubId, student.getId())) return;
+//        ClubRequest r = new ClubRequest();
+//        r.setClub(club);
+//        r.setStudent(student);
+//        r.setCreatedAt(LocalDateTime.now());
+//        requests.save(r);
+//        notify(student, "Заявка в кружок «" + club.getName() + "» отправлена организатору.");
+//        if (club.isAutoReplySend() && hasText(club.getAutoReply())) {
+//            answer(r, club.getAutoReply());
+//        }
+//    }
+//
+//    /** Ответ организатора: свой текст (auto = false) или автоответ кружка (auto = true). */
+//    @Transactional
+//    public void reply(Long requestId, AppUser organizer, String text, boolean auto) {
+//        ClubRequest r = requests.findById(requestId).orElseThrow();
+//        checkOwner(r.getClub(), organizer);
+//        if (r.isAnswered()) return;
+//        String message = auto ? r.getClub().getAutoReply() : text;
+//        if (!hasText(message)) return;
+//        answer(r, message.trim());
+//    }
+//
+//    private void answer(ClubRequest r, String message) {
+//        r.setReplyText(message);
+//        r.setRepliedAt(LocalDateTime.now());
+//        requests.save(r);
+//        notify(r.getStudent(), "Ответ организатора кружка «" + r.getClub().getName() + "» ("
+//            + r.getClub().getOwner().getFullName() + "): " + message);
+//    }
+//
+//    private void notify(AppUser user, String text) {
+//        Notification n = new Notification();
+//        n.setUser(user);
+//        n.setText(text);
+//        n.setCreatedAt(LocalDateTime.now());
+//        notifications.save(n);
+//    }
 
     private static boolean hasText(String s) {
         return s != null && !s.isBlank();

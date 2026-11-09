@@ -1,64 +1,333 @@
-body { font-family: Arial, Helvetica, sans-serif; font-size: 16px; line-height: 1.5; color: #222; background: #fff; margin: 0; }
-.wrap { max-width: 900px; margin: 0 auto; padding: 0 16px; }
-header { border-bottom: 1px solid #ccc; padding: 16px 0; margin-bottom: 24px; }
-header .wrap { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 8px; }
-header .title { font-size: 22px; font-weight: bold; }
-nav a { margin-right: 16px; }
-a { color: #1a4fa0; }
-h1 { font-size: 24px; margin: 0 0 16px; }
-h2 { font-size: 19px; margin: 28px 0 12px; }
-.item { border-bottom: 1px solid #ddd; padding: 12px 0; }
-.item h3 { margin: 0 0 6px; font-size: 17px; }
-.item p { margin: 4px 0; white-space: pre-line; }
-.muted { color: #666; }
-table { border-collapse: collapse; width: 100%; margin-bottom: 16px; }
-th, td { border: 1px solid #ccc; padding: 6px 8px; text-align: left; vertical-align: top; }
-th { background: #f3f3f3; }
-label { display: block; margin: 12px 0 4px; font-weight: bold; }
-input[type=text], input[type=date], input[type=time], input[type=password], select, textarea { width: 100%; max-width: 560px; padding: 6px; font: inherit; border: 1px solid #999; box-sizing: border-box; }
-textarea { min-height: 90px; }
-button, .btn { font: inherit; padding: 6px 14px; border: 1px solid #777; background: #eee; color: #222; cursor: pointer; text-decoration: none; display: inline-block; }
-form.inline { display: inline; }
-.error { color: #b00020; font-size: 14px; }
-footer { border-top: 1px solid #ccc; margin-top: 32px; padding: 12px 0; color: #666; font-size: 14px; }
-table input[type=time] { width: 130px; }
-.schedule { margin: 4px 0; padding-left: 20px; }
+/* =========================================
+   ПОДКЛЮЧАЕМ СОВРЕМЕННЫЙ ШРИФТ INTER
+   ========================================= */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-/* Серые заглушки вместо изображений */
-.thumb { background: #d9d9d9; border-radius: 10px; flex-shrink: 0; }
-.card { display: flex; gap: 16px; padding: 12px; border-bottom: 1px solid #ddd; color: inherit; text-decoration: none; }
-.card:hover { background: #f6f6f6; }
-.card .thumb { width: 160px; height: 110px; }
-.card h3 { margin: 0 0 6px; font-size: 17px; color: #1a4fa0; }
-.card p { margin: 0; }
-.pager { margin: 20px 0; }
-.pager a, .pager b { margin-right: 10px; }
-
-.club-layout { display: flex; gap: 24px; align-items: flex-start; }
-.club-main { flex: 1; min-width: 0; }
-.club-main p { margin: 8px 0; }
-.pre { white-space: pre-line; }
-.thumb-large { width: 100%; height: 240px; margin-bottom: 16px; }
-.panel { width: 120px; display: flex; flex-direction: column; align-items: center; gap: 8px; position: sticky; top: 16px; }
-.thumb-small { display: block; width: 100px; height: 70px; border-radius: 8px; border: 2px solid transparent; box-sizing: border-box; }
-.thumb-small.current { border-color: #1a4fa0; }
-.thumb-small:hover { background: #c4c4c4; }
-.arrow { font-size: 18px; line-height: 1; padding: 4px 12px; text-decoration: none; }
-.arrow.off { color: #bbb; }
-
-@media (max-width: 700px) {
-    .card .thumb { width: 90px; height: 70px; }
-    .club-layout { flex-direction: column; }
-    .club-main { width: 100%; }
-    .panel { width: 100%; flex-direction: row; justify-content: center; position: static; flex-wrap: wrap; }
-    .arrow { transform: rotate(-90deg); }
+/* =========================================
+   БАЗОВЫЕ ПЕРЕМЕННЫЕ И СБРОС
+   ========================================= */
+:root {
+    --chelgu-purple: #4A2B75;
+    --chelgu-orange: #FF9F1C;
+    --chelgu-orange-hover: #e68a0c;
+    --primary-red: #E71D36;
+    --chelgu-bg: #F4F4F5;
+    --white: #FFFFFF;
+    --text-main: #1F2937; /* Сделали текст чуть темнее для читаемости */
+    --text-muted: #6B7280;
+    --border-radius: 12px;
+    --shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    --font-main: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
-/* Роли, заявки, пометки */
-.small { font-size: 13px; color: #777; margin: 2px 0; }
-nav form { display: inline; margin-left: 8px; }
-nav span span { margin-right: 4px; }
-label.check { font-weight: normal; margin-top: 12px; }
-td form { margin: 6px 0 0; }
-td textarea { min-height: 60px; max-width: 320px; }
-.apply { margin-top: 20px; }
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+    font-family: var(--font-main);
+    background-color: var(--chelgu-bg);
+    color: var(--text-main);
+    margin: 0; padding: 0; line-height: 1.6;
+    display: flex; flex-direction: column; min-height: 100vh;
+}
+
+/* УВЕЛИЧИЛИ ШИРИНУ КОНТЕЙНЕРА, ЧТОБЫ ЗАПОЛНИТЬ ЭКРАН */
+.wrap {
+    width: 100%;
+    max-width: 1440px; /* Ограничиваем максимальную ширину */
+    margin: 0 auto;    /* Центрируем по середине */
+    padding-left: 5vw; /* Отступ слева (5% от ширины экрана) */
+    padding-right: 5vw;/* Отступ справа */
+}
+
+/* =========================================
+   ШАПКА САЙТА
+   ========================================= */
+header {
+    background-color: var(--chelgu-purple);
+    color: var(--white);
+}
+
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* ОЧЕНЬ ВАЖНО: убрали padding: 20px 0; и заменили на отступы только сверху и снизу */
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.header-top .title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+nav { display: flex; gap: 25px; align-items: center; flex-wrap: wrap; }
+nav a {
+    color: var(--white); text-decoration: none; font-weight: 500; font-size: 1rem; transition: color 0.3s;
+}
+nav a:hover { color: var(--chelgu-orange); }
+
+.inline button { background: none; border: none; color: var(--white); cursor: pointer; font-size: 1rem; font-family: inherit; font-weight: 500; }
+.inline button:hover { color: var(--primary-red); }
+
+/* =========================================
+   ГЛАВНЫЙ БЛОК (HERO)
+   ========================================= */
+.hero {
+    background-color: var(--chelgu-purple);
+    color: var(--white);
+    padding: 30px 0 50px 0;
+}
+
+.breadcrumbs { color: rgba(255, 255, 255, 0.7); font-size: 0.9rem; margin-bottom: 25px; font-weight: 400; }
+.breadcrumbs a { color: rgba(255, 255, 255, 0.7); text-decoration: none; transition: color 0.3s; }
+.breadcrumbs a:hover { color: var(--primary-red); }
+
+.hero h1 {
+    font-size: 3rem; /* Сделали заголовок аккуратнее (без засечек) */
+    font-weight: 700;
+    margin: 0 0 30px 0;
+    line-height: 1.2;
+    letter-spacing: -0.5px;
+}
+
+.hero h1.auth-title { font-size: 2.5rem; margin-bottom: 15px; }
+
+/* =========================================
+   ФИЛЬТРЫ
+   ========================================= */
+.filters { display: flex; gap: 15px; flex-wrap: wrap; }
+
+.filter-btn {
+    display: flex; align-items: center;
+    background: var(--white); color: var(--text-main);
+    border: none; border-radius: 50px;
+    padding: 8px 8px 8px 24px;
+    font-size: 1rem; font-weight: 600; font-family: inherit;
+    cursor: pointer; transition: all 0.3s ease;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.filter-btn.no-arrow { padding: 12px 30px; }
+
+.filter-btn:hover, .filter-btn.active {
+    background-color: var(--chelgu-orange);
+    color: var(--white);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 15px rgba(255, 159, 28, 0.3);
+}
+
+.filter-btn .arrow-circle {
+    display: flex; align-items: center; justify-content: center;
+    background-color: var(--chelgu-orange); color: var(--white);
+    width: 36px; height: 36px; border-radius: 50%;
+    margin-left: 15px; font-size: 1.1rem;
+    transition: all 0.3s ease;
+}
+
+.filter-btn:hover .arrow-circle, .filter-btn.active .arrow-circle {
+    background-color: var(--white); color: var(--chelgu-orange);
+}
+
+/* =========================================
+   КАРТОЧКИ КРУЖКОВ (СЕТКА)
+   ========================================= */
+.clubs-grid {
+    display: grid;
+    /* Увеличили минимальную ширину карточки, чтобы они не были узкими */
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.card {
+    display: flex; flex-direction: column;
+    background-color: var(--white); border-radius: var(--border-radius);
+    box-shadow: var(--shadow); text-decoration: none; color: inherit;
+    overflow: hidden; transition: transform 0.3s, box-shadow 0.3s;
+    border-bottom: 4px solid transparent;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
+    border-bottom: 4px solid var(--primary-red);
+}
+
+.card .thumb {
+    width: 100%; height: 180px;
+    background: linear-gradient(135deg, #e0e0e0 0%, #f5f5f5 100%);
+    border-bottom: 1px solid #eee;
+}
+
+.card-body { padding: 25px; display: flex; flex-direction: column; flex-grow: 1; }
+.card-body h3 { margin: 0 0 12px 0; font-size: 1.25rem; color: var(--chelgu-purple); font-weight: 700; }
+.card-body p {
+    margin: 0 0 20px 0;
+    color: var(--text-muted);
+    font-size: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    line-height: 1.5;
+
+}
+
+.card-link-text { margin-top: auto; color: var(--chelgu-orange); font-weight: 600; display: flex; align-items: center; gap: 8px; font-size: 0.95rem;}
+.card:hover .card-link-text { color: var(--primary-red); }
+
+/* =========================================
+   МЕРОПРИЯТИЯ
+   ========================================= */
+.item {
+    background-color: var(--white); padding: 25px;
+    border-radius: var(--border-radius); margin-bottom: 20px;
+    box-shadow: var(--shadow); border-left: 6px solid var(--primary-red);
+    transition: transform 0.2s;
+}
+.item:hover { transform: translateX(5px); border-left-color: var(--chelgu-orange); }
+.item h3 { margin: 0 0 10px 0; color: var(--chelgu-purple); }
+
+/* =========================================
+   ПАГИНАЦИЯ
+   ========================================= */
+.pager { display: flex; justify-content: center; align-items: center; gap: 10px; margin: 50px 0; flex-wrap: wrap; }
+.pager a, .pager b {
+    display: inline-flex; justify-content: center; align-items: center;
+    min-width: 45px; height: 45px; padding: 0 15px;
+    border-radius: 50px; text-decoration: none; font-weight: 600; font-size: 1rem;
+    transition: all 0.3s ease;
+}
+.pager a { background-color: var(--white); color: var(--chelgu-purple); border: 2px solid var(--chelgu-purple); }
+.pager a:hover { background-color: var(--chelgu-orange); color: var(--white); border-color: var(--chelgu-orange); }
+.pager b { background-color: var(--chelgu-purple); color: var(--white); border: 2px solid var(--chelgu-purple); }
+
+/* =========================================
+   ФОРМЫ (Вход и Регистрация)
+   ========================================= */
+.auth-wrapper { display: flex; justify-content: center; padding: 50px 20px 80px 20px; }
+
+form {
+    background-color: var(--white); padding: 40px; border-radius: var(--border-radius);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); width: 100%; max-width: 500px;
+    border-top: 5px solid var(--primary-red); margin: 0 auto;
+}
+
+form label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--text-main); font-size: 0.95rem; }
+.label-hint { color: var(--text-muted); font-weight: 400; font-size: 0.85rem; }
+
+form input[type="text"], form input[type="password"], form input[type="number"], form select {
+    width: 100%; padding: 14px 16px; margin-bottom: 20px;
+    border: 1px solid #ced4da; border-radius: 8px; font-size: 1rem; font-family: inherit;
+    background-color: #f8f9fa; transition: all 0.3s ease;
+}
+
+form input[type="text"]:focus, form input[type="password"]:focus, form input[type="number"]:focus, form select:focus {
+    outline: none; border-color: var(--chelgu-purple); background-color: var(--white);
+    box-shadow: 0 0 0 4px rgba(74, 43, 117, 0.1);
+}
+
+form input[type="number"]::-webkit-inner-spin-button,
+form input[type="number"]::-webkit-outer-spin-button {
+    opacity: 1; height: 30px; cursor: pointer;
+}
+
+form button[type="submit"] {
+    background-color: var(--chelgu-orange); color: var(--white); padding: 15px;
+    border: none; border-radius: 8px; cursor: pointer; font-size: 1.1rem; font-weight: 700;
+    width: 100%; transition: background-color 0.3s, transform 0.1s; margin-top: 10px;
+}
+form button[type="submit"]:hover { background-color: var(--primary-red); }
+form button[type="submit"]:active { transform: scale(0.98); }
+
+.auth-link { text-align: center; margin-top: 25px; color: var(--text-muted); font-size: 0.95rem; }
+.auth-link a { color: var(--chelgu-orange); font-weight: 700; text-decoration: none; transition: color 0.3s; }
+.auth-link a:hover { color: var(--primary-red); }
+
+/* Футер */
+footer { margin-top: auto; background-color: var(--chelgu-purple); color: var(--white); text-align: center; padding: 25px 0; }
+
+/* =========================================
+   АДАПТИВНОСТЬ (Мобильные)
+   ========================================= */
+@media (max-width: 768px) {
+    .wrap { padding: 0 20px; } /* Уменьшаем отступы на телефонах */
+    .header-top { flex-direction: column; gap: 15px; text-align: center; padding: 15px 0; }
+    nav { justify-content: center; gap: 15px; }
+    .hero { padding: 20px 0 30px 0; }
+    .hero h1 { font-size: 2.2rem; margin-bottom: 20px; }
+    .hero h1.auth-title { font-size: 2rem; }
+    .clubs-grid { grid-template-columns: 1fr; gap: 20px; }
+    .auth-wrapper { padding: 20px 10px 50px 10px; }
+    form { padding: 25px 20px; }
+}
+
+@media (max-width: 480px) {
+    .filter-btn { width: 100%; justify-content: space-between; }
+    .pager a, .pager b { min-width: 35px; height: 35px; font-size: 0.9rem; padding: 0 10px;}
+}
+
+/* Зеленое уведомление об успехе */
+.success {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 12px 15px;
+    border-radius: 8px;
+    border: 1px solid #c3e6cb;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 0.95rem;
+}
+
+/* =========================================
+   НОВЫЙ ДИЗАЙН КНОПОК В ШАПКЕ
+   ========================================= */
+/* Общая панель навигации */
+nav {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Маленький отступ между кнопками */
+    background: rgba(255, 255, 255, 0.08); /* Полупрозрачный фон */
+    padding: 5px;
+    border-radius: 50px; /* Общая капсула */
+    backdrop-filter: blur(10px); /* Размытие фона (эффект стекла) */
+}
+
+.nav-btn {
+    padding: 8px 16px;
+    border-radius: 40px;
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: var(--white);
+    text-decoration: none;
+    transition: all 0.2s ease;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+}
+
+/* Убираем разделитель (он не нужен в общей капсуле) */
+.nav-divider {
+    display: none;
+}
+
+/* Эффекты при наведении внутри капсулы */
+.btn-main:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+.btn-outline {
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+.btn-outline:hover {
+    background: var(--white);
+    color: var(--chelgu-purple);
+}
+.btn-primary {
+    background: var(--chelgu-orange);
+}
+.btn-primary:hover {
+    background: var(--primary-red);
+}

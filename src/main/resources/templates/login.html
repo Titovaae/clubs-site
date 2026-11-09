@@ -3,18 +3,54 @@
 <head th:replace="~{fragments :: head('Вход')}"></head>
 <body>
 <header th:replace="~{fragments :: header}"></header>
-<div class="wrap">
-    <h1>Вход</h1>
-    <p class="error" th:if="${param.error}">Неверный логин или пароль.</p>
-    <p th:if="${param.registered}">Регистрация прошла успешно. Войдите в свой аккаунт.</p>
-    <form th:action="@{/login}" method="post">
-        <label for="username">Логин</label>
-        <input type="text" id="username" name="username" autofocus>
-        <label for="password">Пароль</label>
-        <input type="password" id="password" name="password">
-        <p><button type="submit">Войти</button></p>
-    </form>
-    <p class="muted">Нет аккаунта? <a th:href="@{/register}">Регистрация для студентов</a></p>
+
+<!-- Фиолетовая шапка страницы -->
+<div class="hero" style="padding-bottom: 40px;">
+    <div class="wrap">
+        <div class="breadcrumbs">
+            <a href="/">Главная</a> &nbsp;&gt;&nbsp; Вход
+        </div>
+        <h1 class="auth-title">Вход в систему</h1>
+    </div>
 </div>
+
+<!-- Обертка для центрирования формы -->
+<div class="auth-wrapper">
+    <form th:action="@{/login}" method="post">
+
+        <!-- Блок ошибки (неверный логин/пароль) -->
+        <div th:if="${param.error}" class="error" style="margin-bottom: 20px; text-align: center;">
+            Неверный логин или пароль.
+        </div>
+
+        <!-- Блок успеха (после регистрации) -->
+        <div th:if="${param.registered}" class="success">
+            Регистрация прошла успешно. Войдите в свой аккаунт.
+        </div>
+
+        <!-- Блок успеха (после выхода) -->
+        <div th:if="${param.logout}" class="success">
+            Вы успешно вышли из системы.
+        </div>
+
+        <div>
+            <label for="username">Логин</label>
+            <input type="text" id="username" name="username" placeholder="Введите ваш логин" required autofocus>
+        </div>
+
+        <div>
+            <label for="password">Пароль</label>
+            <input type="password" id="password" name="password" placeholder="Введите ваш пароль" required>
+        </div>
+
+        <button type="submit">Войти</button>
+
+        <p class="auth-link">
+            Нет аккаунта? <a th:href="@{/register}">Зарегистрироваться</a>
+        </p>
+    </form>
+</div>
+
+<footer><div class="wrap">Спорт ЧелГУ</div></footer>
 </body>
 </html>
