@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Кружок')}"></head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+<div class="wrap">
+    <h1 th:text="${club.id == null} ? 'Новый кружок' : 'Изменить кружок'"></h1>
+    <p class="muted">Поля со звёздочкой (*) обязательны, остальные можно оставить пустыми.</p>
+    <form th:action="@{/admin/clubs}" th:object="${club}" method="post">
+        <input type="hidden" th:field="*{id}">
+
+        <label for="name">Название *</label>
+        <input type="text" id="name" th:field="*{name}" maxlength="150" required>
+        <div class="error" th:errors="*{name}"></div>
+
+        <label for="description">Описание *</label>
+        <textarea id="description" th:field="*{description}" maxlength="2000" required></textarea>
+        <div class="error" th:errors="*{description}"></div>
+
+        <label for="requirements">Требования</label>
+        <textarea id="requirements" th:field="*{requirements}" maxlength="2000"></textarea>
+        <div class="error" th:errors="*{requirements}"></div>
+
+        <label for="organizer">Организатор *</label>
+        <input type="text" id="organizer" th:field="*{organizer}" maxlength="150" required>
+        <div class="error" th:errors="*{organizer}"></div>
+
+        <label for="contacts">Контакты *</label>
+        <input type="text" id="contacts" th:field="*{contacts}" maxlength="255" required>
+        <div class="error" th:errors="*{contacts}"></div>
+
+        <label for="place">Место</label>
+        <input type="text" id="place" th:field="*{place}" maxlength="255">
+        <div class="error" th:errors="*{place}"></div>
+
+        <h2>Расписание тренировок</h2>
+        <p class="muted">Укажите начало и окончание для тех дней, когда есть тренировки. В остальных днях оставьте поля пустыми.</p>
+        <div class="error" th:if="${scheduleError}" th:text="${scheduleError}"></div>
+        <table>
+            <tr><th>День</th><th>Начало</th><th>Окончание</th></tr>
+            <tr th:each="r : ${rows}">
+                <td th:text="${r.dayTitle}"></td>
+                <td><input type="time" name="start" th:value="${r.start}"></td>
+                <td><input type="time" name="end" th:value="${r.end}"></td>
+            </tr>
+        </table>
+
+        <p><button type="submit">Сохранить</button> <a class="btn" th:href="@{/admin}">Отмена</a></p>
+    </form>
+</div>
+</body>
+</html>
