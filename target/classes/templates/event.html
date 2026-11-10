@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head(${event.name})}"></head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+<div class="hero">
+    <div class="wrap">
+        <div class="breadcrumbs">
+            <a th:href="@{/}">Главная</a> &nbsp;&gt;&nbsp;
+            <a th:href="@{/(month=${#temporals.format(event.eventDate, 'yyyy-MM')})}">Мероприятия</a> &nbsp;&gt;&nbsp;
+            <span th:text="${event.name}"></span>
+        </div>
+        <h1 th:text="${event.name}"></h1>
+    </div>
+</div>
+
+<main class="wrap content">
+    <div class="club-main">
+        <p th:if="${event.club != null}"><b>Кружок:</b>
+            <a th:href="@{/clubs/{id}(id=${event.club.id})}" th:text="${event.club.name}"></a></p>
+        <p><b>Дата:</b> <span th:text="${#temporals.format(event.eventDate, 'dd.MM.yyyy')}"></span></p>
+        <p><b>Время:</b> <span th:text="${#temporals.format(event.eventTime, 'HH:mm')}"></span></p>
+        <p><b>Место:</b> <span th:text="${event.place}"></span></p>
+        <p th:if="${event.requirements}"><b>Требования:</b> <span th:text="${event.requirements}"></span></p>
+        <p th:if="${event.contacts}"><b>Контакты:</b> <span th:text="${event.contacts}"></span></p>
+        <h2>Описание</h2>
+        <p class="pre" th:text="${event.description}"></p>
+        <p><a class="btn secondary small" th:href="@{/events/day/{d}(d=${event.eventDate})}">Все мероприятия этого дня</a></p>
+    </div>
+</main>
+
+<footer><div class="wrap">Спорт ЧелГУ</div></footer>
+</body>
+</html>

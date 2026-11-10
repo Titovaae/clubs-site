@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Вход')}"></head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+<div th:replace="~{fragments :: hero('Вход', 'Вход в систему')}"></div>
+
+<div class="auth-wrapper">
+    <form class="form-card" th:action="@{/login}" method="post">
+        <div th:if="${param.error}" class="error block">Неверный логин или пароль.</div>
+        <div th:if="${param.registered}" class="success">Регистрация прошла успешно. Войдите в свой аккаунт.</div>
+
+        <label for="username">Логин</label>
+        <input type="text" id="username" name="username" placeholder="Введите ваш логин" required autofocus>
+
+        <label for="password">Пароль</label>
+        <input type="password" id="password" name="password" placeholder="Введите ваш пароль" required>
+
+        <button type="submit" class="btn">Войти</button>
+
+        <p class="auth-link">Нет аккаунта? <a th:href="@{/register}">Зарегистрироваться</a></p>
+    </form>
+</div>
+
+<footer><div class="wrap">Спорт ЧелГУ</div></footer>
+</body>
+</html>

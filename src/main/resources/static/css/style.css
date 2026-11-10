@@ -1,0 +1,249 @@
+/* =========================================
+   Стиль перенесён из проекта clubs-site-master (фиолетово-оранжевая тема ЧелГУ)
+   и дополнен стилями для страниц текущего проекта
+   ========================================= */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+    --chelgu-purple: #4A2B75;
+    --chelgu-purple-light: #F1ECF8;
+    --chelgu-orange: #FF9F1C;
+    --chelgu-orange-hover: #e68a0c;
+    --primary-red: #E71D36;
+    --chelgu-bg: #F4F4F5;
+    --white: #FFFFFF;
+    --text-main: #1F2937;
+    --text-muted: #6B7280;
+    --border-radius: 12px;
+    --shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    --font-main: 'Inter', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+    font-family: var(--font-main);
+    background-color: var(--chelgu-bg);
+    color: var(--text-main);
+    margin: 0; padding: 0; line-height: 1.6;
+    display: flex; flex-direction: column; min-height: 100vh;
+}
+
+.wrap { width: 100%; max-width: 1440px; margin: 0 auto; padding-left: 5vw; padding-right: 5vw; }
+.content { padding-top: 40px; padding-bottom: 60px; }
+a { color: var(--chelgu-purple); }
+h2 { color: var(--chelgu-purple); font-size: 1.4rem; margin: 36px 0 16px; }
+
+/* ---------- Шапка ---------- */
+header { background-color: var(--chelgu-purple); color: var(--white); }
+.header-top {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-top: 20px; padding-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    gap: 15px; flex-wrap: wrap;
+}
+.header-top .title { font-size: 1.4rem; font-weight: 700; letter-spacing: 0.5px; color: var(--white); text-decoration: none; }
+
+nav {
+    display: flex; align-items: center; gap: 5px; flex-wrap: wrap;
+    background: rgba(255, 255, 255, 0.08); padding: 5px; border-radius: 50px;
+    backdrop-filter: blur(10px);
+}
+.nav-btn {
+    padding: 8px 16px; border-radius: 40px; font-weight: 500; font-size: 0.9rem;
+    color: var(--white); text-decoration: none; transition: all 0.2s ease;
+    border: none; background: transparent; cursor: pointer; font-family: inherit;
+}
+.btn-main:hover { background: rgba(255, 255, 255, 0.15); }
+.btn-outline { border: 1px solid rgba(255, 255, 255, 0.2); }
+.btn-outline:hover { background: var(--white); color: var(--chelgu-purple); }
+.btn-primary { background: var(--chelgu-orange); }
+.btn-primary:hover { background: var(--primary-red); }
+.nav-user { display: flex; align-items: center; gap: 10px; margin-left: 8px; }
+.nav-name { color: rgba(255, 255, 255, 0.75); font-size: 0.9rem; }
+form.inline { display: inline; margin: 0; padding: 0; background: none; box-shadow: none; border: 0; }
+
+/* ---------- Заголовочный блок ---------- */
+.hero { background-color: var(--chelgu-purple); color: var(--white); padding: 30px 0 45px 0; }
+.breadcrumbs { color: rgba(255, 255, 255, 0.7); font-size: 0.9rem; margin-bottom: 20px; }
+.breadcrumbs a { color: rgba(255, 255, 255, 0.7); text-decoration: none; transition: color 0.3s; }
+.breadcrumbs a:hover { color: var(--chelgu-orange); }
+.hero h1 { font-size: 2.6rem; font-weight: 700; margin: 0; line-height: 1.2; letter-spacing: -0.5px; }
+
+/* ---------- Кнопки ---------- */
+.btn, button.btn {
+    display: inline-block; background-color: var(--chelgu-orange); color: var(--white);
+    border: 2px solid var(--chelgu-orange); border-radius: 50px; padding: 10px 24px;
+    font: inherit; font-weight: 600; text-decoration: none; cursor: pointer;
+    transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+}
+.btn:hover { background-color: var(--primary-red); border-color: var(--primary-red); color: var(--white); }
+.btn.secondary { background: var(--white); color: var(--chelgu-purple); border-color: var(--chelgu-purple); }
+.btn.secondary:hover { background: var(--chelgu-purple); color: var(--white); border-color: var(--chelgu-purple); }
+.btn.danger { background: var(--white); color: var(--primary-red); border-color: var(--primary-red); }
+.btn.danger:hover { background: var(--primary-red); color: var(--white); }
+.btn.small { padding: 5px 14px; font-size: 0.88rem; }
+
+/* ---------- Сетка кружков ---------- */
+.clubs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 30px; }
+.card {
+    display: flex; flex-direction: column; background-color: var(--white);
+    border-radius: var(--border-radius); box-shadow: var(--shadow);
+    text-decoration: none; color: inherit; overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s; border-bottom: 4px solid transparent;
+}
+.card:hover { transform: translateY(-5px); box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1); border-bottom: 4px solid var(--primary-red); }
+.thumb { background: linear-gradient(135deg, #e0e0e0 0%, #f5f5f5 100%); border-radius: 10px; flex-shrink: 0; }
+.card .thumb { width: 100%; height: 180px; border-radius: 0; border-bottom: 1px solid #eee; }
+.card-body { padding: 25px; display: flex; flex-direction: column; flex-grow: 1; }
+.card-body h3 { margin: 0 0 12px 0; font-size: 1.25rem; color: var(--chelgu-purple); font-weight: 700; }
+.card-body p { margin: 0 0 14px 0; color: var(--text-muted); line-height: 1.5; }
+.card-link-text { margin-top: auto; color: var(--chelgu-orange); font-weight: 600; font-size: 0.95rem; }
+.card:hover .card-link-text { color: var(--primary-red); }
+
+/* ---------- Мероприятия ---------- */
+.item {
+    background-color: var(--white); padding: 25px; border-radius: var(--border-radius);
+    margin-bottom: 20px; box-shadow: var(--shadow); border-left: 6px solid var(--primary-red);
+    transition: transform 0.2s;
+}
+.item:hover { transform: translateX(5px); border-left-color: var(--chelgu-orange); }
+.item h3 { margin: 0 0 10px 0; color: var(--chelgu-purple); }
+.item p { margin: 4px 0; }
+
+/* ---------- Календарь ---------- */
+.calendar {
+    max-width: 400px; background: var(--white); border-radius: var(--border-radius);
+    box-shadow: var(--shadow); padding: 18px 18px 12px; margin-bottom: 10px;
+}
+.cal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 1.1rem; color: var(--chelgu-purple); }
+.cal-head a { text-decoration: none; font-size: 1.4rem; padding: 0 12px; color: var(--chelgu-orange); font-weight: 700; }
+.cal-head a:hover { color: var(--primary-red); }
+.calendar table { width: 100%; table-layout: fixed; border-collapse: collapse; box-shadow: none; border-radius: 0; background: none; }
+.calendar th { color: var(--text-muted); font-size: 0.8rem; font-weight: 600; text-align: center; padding: 4px 0; background: none; }
+.calendar td { text-align: center; padding: 5px 0; border: 0; }
+.calendar td.today span, .calendar td.today a { font-weight: 700; }
+.calendar td.today { background: var(--chelgu-purple-light); border-radius: 8px; }
+.calendar a.has-events {
+    display: inline-block; min-width: 30px; line-height: 30px; border-radius: 50%;
+    background: var(--chelgu-orange); color: var(--white); text-decoration: none; font-weight: 600;
+}
+.calendar a.has-events:hover { background: var(--primary-red); }
+
+/* ---------- Страница кружка ---------- */
+.club-layout { display: flex; gap: 30px; align-items: flex-start; }
+.club-main { flex: 1; min-width: 0; background: var(--white); border-radius: var(--border-radius); box-shadow: var(--shadow); padding: 30px; }
+.club-main p { margin: 10px 0; }
+.club-main h2 { margin: 24px 0 8px; font-size: 1.15rem; }
+.thumb-large { width: 100%; height: 260px; margin-bottom: 20px; }
+.panel {
+    width: 140px; display: flex; flex-direction: column; align-items: center; gap: 10px;
+    position: sticky; top: 16px; background: var(--white); border-radius: var(--border-radius);
+    box-shadow: var(--shadow); padding: 14px 10px;
+}
+.thumb-small { display: block; width: 110px; height: 76px; border-radius: 10px; border: 3px solid transparent; transition: border-color 0.2s; }
+.thumb-small:hover { border-color: var(--chelgu-purple-light); background: #d6d6d6; }
+.thumb-small.current { border-color: var(--chelgu-orange); }
+.arrow {
+    display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%;
+    background: var(--chelgu-orange); color: var(--white); text-decoration: none; font-size: 0.9rem; transition: background 0.2s;
+}
+a.arrow:hover { background: var(--primary-red); }
+.arrow.off { background: #e5e5e8; color: #b4b4bb; }
+.schedule { margin: 6px 0; padding-left: 22px; }
+.pre { white-space: pre-line; }
+.apply { margin-top: 24px; }
+
+/* ---------- Таблицы (кабинеты) ---------- */
+.table-wrap { overflow-x: auto; background: var(--white); border-radius: var(--border-radius); box-shadow: var(--shadow); margin-bottom: 20px; }
+table { width: 100%; border-collapse: collapse; }
+th { background: var(--chelgu-purple-light); color: var(--chelgu-purple); text-align: left; font-weight: 600; }
+th, td { padding: 12px 16px; vertical-align: top; border-bottom: 1px solid #eee; }
+tr:last-child td { border-bottom: 0; }
+td form { margin: 6px 0 0; }
+td textarea { min-height: 60px; max-width: 320px; }
+td a.btn, td form.inline { margin-right: 6px; }
+
+/* ---------- Формы ---------- */
+.auth-wrapper { display: flex; justify-content: center; padding: 50px 20px 80px 20px; }
+.form-card {
+    background-color: var(--white); padding: 40px; border-radius: var(--border-radius);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); width: 100%; max-width: 500px;
+    border-top: 5px solid var(--primary-red); margin: 0 auto;
+}
+.form-card.wide { max-width: 780px; }
+.form-card label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.95rem; }
+.label-hint { color: var(--text-muted); font-weight: 400; font-size: 0.85rem; }
+.form-card input[type="text"], .form-card input[type="password"], .form-card input[type="number"],
+.form-card input[type="date"], .form-card input[type="time"], .form-card select, .form-card textarea {
+    width: 100%; padding: 14px 16px; margin-bottom: 20px; border: 1px solid #ced4da; border-radius: 8px;
+    font-size: 1rem; font-family: inherit; background-color: #f8f9fa; transition: all 0.3s ease;
+}
+.form-card textarea { min-height: 110px; resize: vertical; }
+.form-card input:focus, .form-card select:focus, .form-card textarea:focus {
+    outline: none; border-color: var(--chelgu-purple); background-color: var(--white);
+    box-shadow: 0 0 0 4px rgba(74, 43, 117, 0.1);
+}
+.form-card h2 { margin-top: 28px; }
+.form-card table input[type="time"] { width: 150px; margin: 0; padding: 8px 10px; }
+.form-card .table-wrap { box-shadow: none; border: 1px solid #eee; }
+.form-card label.check { font-weight: 500; display: flex; gap: 10px; align-items: center; }
+.form-card label.check input { width: auto; margin: 0; }
+.form-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 10px; }
+.auth-wrapper .form-card button[type="submit"] { width: 100%; padding: 15px; font-size: 1.05rem; margin-top: 6px; }
+.auth-link { text-align: center; margin-top: 25px; color: var(--text-muted); font-size: 0.95rem; }
+.auth-link a { color: var(--chelgu-orange); font-weight: 700; text-decoration: none; }
+.auth-link a:hover { color: var(--primary-red); }
+
+/* ---------- Сообщения ---------- */
+.muted { color: var(--text-muted); }
+.small { font-size: 0.82rem; color: var(--text-muted); margin: 2px 0; }
+.error { color: var(--primary-red); font-size: 0.88rem; margin: -12px 0 14px; }
+.error.block { background: #fdecea; border: 1px solid #f5c2c7; border-radius: 8px; padding: 12px 15px; margin: 0 0 20px; text-align: center; }
+.success { background: #d4edda; color: #155724; padding: 12px 15px; border-radius: 8px; border: 1px solid #c3e6cb; margin-bottom: 20px; text-align: center; font-size: 0.95rem; }
+
+/* ---------- Пагинация ---------- */
+.pager { display: flex; justify-content: center; align-items: center; gap: 10px; margin: 50px 0 0; flex-wrap: wrap; }
+.pager span { display: inline-flex; gap: 10px; }
+.pager a, .pager b {
+    display: inline-flex; justify-content: center; align-items: center; min-width: 45px; height: 45px; padding: 0 15px;
+    border-radius: 50px; text-decoration: none; font-weight: 600; transition: all 0.3s ease;
+}
+.pager a { background-color: var(--white); color: var(--chelgu-purple); border: 2px solid var(--chelgu-purple); }
+.pager a:hover { background-color: var(--chelgu-orange); color: var(--white); border-color: var(--chelgu-orange); }
+.pager b { background-color: var(--chelgu-purple); color: var(--white); border: 2px solid var(--chelgu-purple); }
+
+/* ---------- Подвал ---------- */
+footer { margin-top: auto; background-color: var(--chelgu-purple); color: var(--white); text-align: center; padding: 25px 0; }
+
+/* ---------- Мобильные ---------- */
+@media (max-width: 768px) {
+    .wrap { padding-left: 20px; padding-right: 20px; }
+    .header-top { flex-direction: column; text-align: center; padding-top: 15px; padding-bottom: 15px; }
+    nav { justify-content: center; border-radius: 24px; }
+    .hero { padding: 20px 0 30px 0; }
+    .hero h1 { font-size: 2rem; }
+    .content { padding-top: 24px; }
+    .clubs-grid { grid-template-columns: 1fr; gap: 20px; }
+    .auth-wrapper { padding: 20px 10px 50px 10px; }
+    .form-card { padding: 25px 20px; }
+    .club-layout { flex-direction: column; }
+    .club-main { width: 100%; padding: 20px; }
+    .panel { width: 100%; flex-direction: row; justify-content: center; position: static; flex-wrap: wrap; }
+    .arrow { transform: rotate(-90deg); }
+}
+@media (max-width: 480px) {
+    .pager a, .pager b { min-width: 35px; height: 35px; font-size: 0.9rem; padding: 0 10px; }
+}
+
+/* ---------- Уведомления и ссылки в карточках ---------- */
+a.plain { color: inherit; text-decoration: none; }
+a.plain:hover { color: var(--chelgu-orange); }
+.notice {
+    display: block; background: var(--white); padding: 20px 25px; border-radius: var(--border-radius);
+    box-shadow: var(--shadow); margin-bottom: 16px; border-left: 6px solid var(--chelgu-orange);
+    text-decoration: none; color: inherit; transition: transform 0.2s;
+}
+a.notice:hover { transform: translateX(5px); border-left-color: var(--primary-red); }
+.notice h3 { margin: 4px 0 8px; color: var(--chelgu-purple); }
+.notice p { margin: 4px 0; }

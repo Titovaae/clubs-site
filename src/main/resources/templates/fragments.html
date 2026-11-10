@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${title} + ' — Спорт ЧелГУ'">Спорт ЧелГУ</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<header th:fragment="header">
+    <div class="wrap header-top">
+        <a class="title" th:href="@{/}">ЧелГУ: Спорт и Кружки</a>
+        <nav>
+            <a th:href="@{/}" class="nav-btn btn-main">Мероприятия</a>
+            <a th:href="@{/clubs}" class="nav-btn btn-main">Кружки</a>
+            <a sec:authorize="hasRole('STUDENT')" th:href="@{/student/notifications}" class="nav-btn btn-main">Уведомления</a>
+            <a sec:authorize="hasRole('ORGANIZER')" th:href="@{/organizer}" class="nav-btn btn-main">Мои кружки</a>
+            <!--/* ВРЕМЕННО ОТКЛЮЧЕНО: заявки (запись на кружок заменена подпиской)
+            <a sec:authorize="hasRole('ORGANIZER')" th:href="@{/organizer/requests}" class="nav-btn btn-main">Заявки</a>
+            */-->
+            <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin/users}" class="nav-btn btn-main">Пользователи</a>
+
+            <a sec:authorize="!isAuthenticated()" th:href="@{/login}" class="nav-btn btn-outline">Войти</a>
+            <a sec:authorize="!isAuthenticated()" th:href="@{/register}" class="nav-btn btn-primary">Регистрация</a>
+
+            <span sec:authorize="isAuthenticated()" class="nav-user">
+                <span class="nav-name" sec:authentication="name"></span>
+                <form class="inline" th:action="@{/logout}" method="post">
+                    <button type="submit" class="nav-btn btn-outline">Выйти</button>
+                </form>
+            </span>
+        </nav>
+    </div>
+</header>
+
+<!-- Фиолетовый заголовок страницы с «хлебными крошками» -->
+<div class="hero" th:fragment="hero(crumb, title)">
+    <div class="wrap">
+        <div class="breadcrumbs"><a th:href="@{/}">Главная</a> &nbsp;&gt;&nbsp; <span th:text="${crumb}"></span></div>
+        <h1 th:text="${title}"></h1>
+    </div>
+</div>
+
+<div class="item" th:fragment="eventItem(e)">
+    <h3><a class="plain" th:href="@{/events/{id}(id=${e.id})}" th:text="${e.name}"></a></h3>
+    <p th:if="${e.club != null}"><b>Кружок:</b> <a th:href="@{/clubs/{id}(id=${e.club.id})}" th:text="${e.club.name}"></a></p>
+    <p><b>Дата:</b> <span th:text="${#temporals.format(e.eventDate, 'dd.MM.yyyy')}"></span>,
+       <b>время:</b> <span th:text="${#temporals.format(e.eventTime, 'HH:mm')}"></span></p>
+    <p><b>Место:</b> <span th:text="${e.place}"></span></p>
+    <p th:if="${e.requirements}"><b>Требования:</b> <span th:text="${e.requirements}"></span></p>
+    <p th:if="${e.contacts}"><b>Контакты:</b> <span th:text="${e.contacts}"></span></p>
+    <p th:text="${e.description}"></p>
+</div>
+</body>
+</html>

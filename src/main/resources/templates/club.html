@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments :: head(${club.name})}"></head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+<div class="hero">
+    <div class="wrap">
+        <div class="breadcrumbs">
+            <a th:href="@{/}">Главная</a> &nbsp;&gt;&nbsp;
+            <a th:href="@{/clubs(page=${listPage})}">Кружки</a> &nbsp;&gt;&nbsp;
+            <span th:text="${club.name}"></span>
+        </div>
+        <h1 th:text="${club.name}"></h1>
+    </div>
+</div>
+
+<main class="wrap content">
+    <div class="club-layout">
+        <div class="club-main">
+            <div class="thumb thumb-large"></div>
+            <p class="small" th:if="${club.updatedAt != null}">Обновлено: <span th:text="${#temporals.format(club.updatedAt, 'dd.MM.yyyy')}"></span></p>
+            <p class="pre" th:text="${club.description}"></p>
+            <p th:if="${club.requirements}"><b>Требования:</b> <span th:text="${club.requirements}"></span></p>
+            <div th:if="${!club.sessions.empty}">
+                <b>Расписание:</b>
+                <ul class="schedule">
+                    <li th:each="s : ${club.sessions}"><span th:text="${s.dayTitle}"></span>, <span th:text="${s.timeRange}"></span></li>
+                </ul>
+            </div>
+            <p><b>Организатор:</b> <span th:text="${club.owner.fullName}"></span></p>
+            <p th:if="${club.place}"><b>Место:</b> <span th:text="${club.place}"></span></p>
+            <p th:if="${club.owner.contacts}"><b>Контакты:</b> <span th:text="${club.owner.contacts}"></span></p>
+
+            <div class="apply">
+                <p class="muted" sec:authorize="!isAuthenticated()">
+                    Чтобы получать уведомления о новых мероприятиях кружка, <a th:href="@{/login}">войдите</a> или
+                    <a th:href="@{/register}">зарегистрируйтесь</a> как студент.
+                </p>
+                <div sec:authorize="hasRole('STUDENT')">
+                    <form th:unless="${following}" th:action="@{/student/clubs/{id}/follow(id=${club.id})}" method="post">
+                        <button type="submit" class="btn">Следить за кружком</button>
+                        <p class="small">Вы будете получать уведомления о новых мероприятиях этого кружка.</p>
+                    </form>
+                    <form th:if="${following}" th:action="@{/student/clubs/{id}/unfollow(id=${club.id})}" method="post">
+                        <p class="muted">Вы следите за этим кружком и получаете уведомления о его новых мероприятиях.</p>
+                        <button type="submit" class="btn secondary">Не следить</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <aside class="panel">
+            <a class="arrow" th:if="${prev != null}" th:href="@{/clubs/{id}(id=${prev.id})}" title="Предыдущий кружок">▲</a>
+            <span class="arrow off" th:if="${prev == null}">▲</span>
+
+            <a class="thumb thumb-small" th:each="c : ${panel}" th:href="@{/clubs/{id}(id=${c.id})}"
+               th:title="${c.name}" th:classappend="${c.id == club.id} ? 'current'"></a>
+
+            <a class="arrow" th:if="${next != null}" th:href="@{/clubs/{id}(id=${next.id})}" title="Следующий кружок">▼</a>
+            <span class="arrow off" th:if="${next == null}">▼</span>
+        </aside>
+    </div>
+</main>
+<footer><div class="wrap">Спорт ЧелГУ</div></footer>
+</body>
+</html>

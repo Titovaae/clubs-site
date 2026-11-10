@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Мероприятия')}"></head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+<div th:replace="~{fragments :: hero('Мероприятия', 'Мероприятия')}"></div>
+
+<main class="wrap content">
+    <!--/* ВРЕМЕННО ОТКЛЮЧЕНО: календарь мероприятий
+    <div class="calendar">
+        <div class="cal-head">
+            <a th:href="@{/(month=${prevMonth})}" title="Предыдущий месяц">‹</a>
+            <b th:text="${monthTitle}"></b>
+            <a th:href="@{/(month=${nextMonth})}" title="Следующий месяц">›</a>
+        </div>
+        <table>
+            <tr><th>Пн</th><th>Вт</th><th>Ср</th><th>Чт</th><th>Пт</th><th>Сб</th><th>Вс</th></tr>
+            <tr th:each="week : ${weeks}">
+                <td th:each="d : ${week}" th:classappend="${d.today} ? 'today'">
+                    <th:block th:if="${d.date != null}">
+                        <a th:if="${d.marked}" class="has-events" th:href="@{/events/day/{iso}(iso=${d.iso})}"
+                           th:text="${d.number}" title="Есть мероприятия"></a>
+                        <span th:unless="${d.marked}" th:text="${d.number}"></span>
+                    </th:block>
+                </td>
+            </tr>
+        </table>
+        <p class="small">Дни с мероприятиями выделены. Нажмите на дату, чтобы увидеть список.</p>
+    </div>
+    */-->
+
+    <h2>Все мероприятия</h2>
+    <p class="muted" th:if="${events.empty}">Мероприятий пока нет.</p>
+    <th:block th:each="e : ${events}">
+        <div th:replace="~{fragments :: eventItem(${e})}"></div>
+    </th:block>
+</main>
+
+<footer><div class="wrap">Спорт ЧелГУ</div></footer>
+</body>
+</html>

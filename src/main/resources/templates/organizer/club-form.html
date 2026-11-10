@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Кружок')}"></head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+<div th:replace="~{fragments :: hero('Кабинет организатора', ${club.id == null ? 'Новый кружок' : 'Изменить кружок'})}"></div>
+<main class="wrap content">
+    <p class="muted">Поля со звёздочкой (*) обязательны. Организатор и контакты в карточке кружка берутся из вашего профиля.</p>
+    <form class="form-card wide" th:action="@{/organizer/clubs}" th:object="${club}" method="post">
+        <input type="hidden" th:field="*{id}">
+
+        <label for="name">Название *</label>
+        <input type="text" id="name" th:field="*{name}" maxlength="150">
+        <div class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+
+        <label for="description">Описание *</label>
+        <textarea id="description" th:field="*{description}" maxlength="2000"></textarea>
+        <div class="error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
+
+        <label for="requirements">Требования</label>
+        <textarea id="requirements" th:field="*{requirements}" maxlength="2000"></textarea>
+        <div class="error" th:if="${#fields.hasErrors('requirements')}" th:errors="*{requirements}"></div>
+
+        <label for="place">Место</label>
+        <input type="text" id="place" th:field="*{place}" maxlength="255">
+        <div class="error" th:if="${#fields.hasErrors('place')}" th:errors="*{place}"></div>
+
+        <h2>Расписание тренировок</h2>
+        <p class="muted">Укажите начало и окончание для дней с тренировками. В остальных днях оставьте поля пустыми.</p>
+        <div class="error" th:if="${scheduleError}" th:text="${scheduleError}"></div>
+        <div class="table-wrap"><table>
+            <tr><th>День</th><th>Начало</th><th>Окончание</th></tr>
+            <tr th:each="r : ${rows}">
+                <td th:text="${r.dayTitle}"></td>
+                <td><input type="time" name="start" th:value="${r.start}"></td>
+                <td><input type="time" name="end" th:value="${r.end}"></td>
+            </tr>
+        </table></div>
+
+        <!--/* ВРЕМЕННО ОТКЛЮЧЕНО: автоответ на заявки
+        <h2>Автоответ на заявки</h2>
+        <p class="muted">Этот текст можно отправить студенту кнопкой «Автоответ» на странице заявок или сразу при поступлении заявки.</p>
+        <label for="autoReply">Текст автоответа</label>
+        <textarea id="autoReply" th:field="*{autoReply}" maxlength="1000"></textarea>
+        <div class="error" th:if="${#fields.hasErrors('autoReply')}" th:errors="*{autoReply}"></div>
+        <label class="check"><input type="checkbox" th:field="*{autoReplySend}"> Отправлять автоответ сразу при поступлении заявки</label>
+        */-->
+
+        <div class="form-actions"><button type="submit" class="btn">Сохранить</button><a class="btn secondary" th:href="@{/organizer}">Отмена</a></div>
+    </form>
+</main>
+<footer><div class="wrap">Спорт ЧелГУ</div></footer>
+</body>
+</html>

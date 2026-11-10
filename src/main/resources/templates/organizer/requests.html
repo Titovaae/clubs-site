@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Заявки')}"></head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+<div th:replace="~{fragments :: hero('Кабинет организатора', 'Заявки студентов')}"></div>
+<main class="wrap content">
+    <p class="muted" th:if="${requests.empty}">Заявок пока нет.</p>
+    <div class="table-wrap" th:if="${!requests.empty}"><table>
+        <tr><th>Дата</th><th>Кружок</th><th>Студент</th><th>Группа</th><th>Курс</th><th>Ответ</th></tr>
+        <tr th:each="r : ${requests}">
+            <td th:text="${#temporals.format(r.createdAt, 'dd.MM.yyyy HH:mm')}"></td>
+            <td th:text="${r.club.name}"></td>
+            <td th:text="${r.student.fullName}"></td>
+            <td th:text="${r.student.groupName}"></td>
+            <td th:text="${r.student.course}"></td>
+            <td>
+                <div th:if="${r.answered}">
+                    <b>Отправлено:</b> <span th:text="${r.replyText}"></span>
+                </div>
+                <div th:unless="${r.answered}">
+                    <form th:action="@{/organizer/requests/{id}/reply(id=${r.id})}" method="post">
+                        <textarea name="text" required maxlength="1000" placeholder="Текст ответа студенту"></textarea>
+                        <button type="submit" class="btn">Отправить ответ</button>
+                    </form>
+                    <!--/* ВРЕМЕННО ОТКЛЮЧЕНО: автоответ
+                    <form th:if="${!#strings.isEmpty(r.club.autoReply)}"
+                          th:action="@{/organizer/requests/{id}/auto-reply(id=${r.id})}" method="post">
+                        <button type="submit" th:title="${r.club.autoReply}">Автоответ</button>
+                    </form>
+                    */-->
+                </div>
+            </td>
+        </tr>
+    </table></div>
+</main>
+<footer><div class="wrap">Спорт ЧелГУ</div></footer>
+</body>
+</html>

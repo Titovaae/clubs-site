@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Уведомления')}"></head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+<div th:replace="~{fragments :: hero('Уведомления', 'Уведомления')}"></div>
+
+<main class="wrap content">
+    <p class="small">Уведомления о новых мероприятиях кружков, за которыми вы следите. Хранятся 7 дней с момента получения.</p>
+
+    <p class="muted" th:if="${followed.empty}">
+        Вы пока не следите ни за одним кружком. Откройте страницу кружка и нажмите «Следить за кружком».
+    </p>
+    <p th:if="${!followed.empty}"><b>Вы следите за:</b>
+        <span th:each="f, st : ${followed}">
+            <a th:href="@{/clubs/{id}(id=${f.club.id})}" th:text="${f.club.name}"></a><span th:unless="${st.last}">, </span>
+        </span>
+    </p>
+
+    <h2>Новые мероприятия</h2>
+    <p class="muted" th:if="${notifications.empty}">Уведомлений пока нет.</p>
+
+    <th:block th:each="n : ${notifications}">
+        <a class="notice" th:if="${n.event != null}" th:href="@{/events/{id}(id=${n.event.id})}">
+            <span class="small" th:text="${#temporals.format(n.createdAt, 'dd.MM.yyyy HH:mm')}"></span>
+            <h3 th:text="${n.event.name}"></h3>
+            <p><b>Кружок:</b> <span th:text="${n.event.club != null} ? ${n.event.club.name} : '—'"></span></p>
+            <p><b>Дата мероприятия:</b> <span th:text="${#temporals.format(n.event.eventDate, 'dd.MM.yyyy')}"></span></p>
+            <span class="card-link-text">Подробнее →</span>
+        </a>
+        <div class="notice" th:unless="${n.event != null}">
+            <span class="small" th:text="${#temporals.format(n.createdAt, 'dd.MM.yyyy HH:mm')}"></span>
+            <p th:text="${n.text}"></p>
+        </div>
+    </th:block>
+</main>
+
+<footer><div class="wrap">Спорт ЧелГУ</div></footer>
+</body>
+</html>

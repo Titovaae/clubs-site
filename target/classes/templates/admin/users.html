@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Пользователи')}"></head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+<div th:replace="~{fragments :: hero('Администрирование', 'Пользователи')}"></div>
+<main class="wrap content">
+    <p><a class="btn" th:href="@{/admin/users/new}">Создать пользователя</a></p>
+    <div class="table-wrap"><table>
+        <tr><th>ФИО</th><th>Логин</th><th>Роль</th><th>Группа / курс</th><th>Контакты</th></tr>
+        <tr th:each="u : ${users}">
+            <td th:text="${u.fullName}"></td>
+            <td th:text="${u.username}"></td>
+            <td th:text="${u.role.title}"></td>
+            <td th:text="${u.groupName != null} ? ${u.groupName + ', ' + u.course + ' курс'} : ''"></td>
+            <td th:text="${u.contacts}"></td>
+        </tr>
+    </table></div>
+</main>
+<footer><div class="wrap">Спорт ЧелГУ</div></footer>
+</body>
+</html>

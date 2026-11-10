@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Мои кружки и мероприятия')}"></head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+<div th:replace="~{fragments :: hero('Кабинет организатора', 'Мои кружки и мероприятия')}"></div>
+<main class="wrap content">
+
+    <h2>Кружки</h2>
+    <p><a class="btn" th:href="@{/organizer/clubs/new}">Добавить кружок</a></p>
+    <div class="table-wrap"><table>
+        <tr><th>Название</th><th>Место</th><th>Обновлено</th><th>Действия</th></tr>
+        <tr th:each="c : ${clubs}">
+            <td th:text="${c.name}"></td>
+            <td th:text="${c.place}"></td>
+            <td th:text="${c.updatedAt != null} ? ${#temporals.format(c.updatedAt, 'dd.MM.yyyy')} : ''"></td>
+            <td>
+                <a class="btn small secondary" th:href="@{/organizer/clubs/{id}/edit(id=${c.id})}">Изменить</a>
+                <form class="inline" th:action="@{/organizer/clubs/{id}/delete(id=${c.id})}" method="post"
+                      onsubmit="return confirm('Удалить кружок вместе с заявками?');"><button type="submit" class="btn small danger">Удалить</button></form>
+            </td>
+        </tr>
+    </table></div>
+
+    <h2>Мероприятия</h2>
+    <p><a class="btn" th:href="@{/organizer/events/new}">Добавить мероприятие</a></p>
+    <div class="table-wrap"><table>
+        <tr><th>Название</th><th>Кружок</th><th>Дата</th><th>Время</th><th>Действия</th></tr>
+        <tr th:each="e : ${events}">
+            <td th:text="${e.name}"></td>
+            <td th:text="${e.club != null} ? ${e.club.name} : '—'"></td>
+            <td th:text="${#temporals.format(e.eventDate, 'dd.MM.yyyy')}"></td>
+            <td th:text="${#temporals.format(e.eventTime, 'HH:mm')}"></td>
+            <td>
+                <a class="btn small secondary" th:href="@{/organizer/events/{id}/edit(id=${e.id})}">Изменить</a>
+                <form class="inline" th:action="@{/organizer/events/{id}/delete(id=${e.id})}" method="post"
+                      onsubmit="return confirm('Удалить мероприятие?');"><button type="submit" class="btn small danger">Удалить</button></form>
+            </td>
+        </tr>
+    </table></div>
+</main>
+<footer><div class="wrap">Спорт ЧелГУ</div></footer>
+</body>
+</html>

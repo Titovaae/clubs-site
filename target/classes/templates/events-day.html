@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Мероприятия за день')}"></head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+<div th:replace="~{fragments :: hero('Мероприятия', ${'Мероприятия: ' + #temporals.format(date, 'dd.MM.yyyy')})}"></div>
+
+<main class="wrap content">
+    <p><a class="btn secondary small" th:href="@{/(month=${month})}">← К календарю</a></p>
+    <p class="muted" th:if="${events.empty}">В этот день мероприятий нет.</p>
+    <th:block th:each="e : ${events}">
+        <div th:replace="~{fragments :: eventItem(${e})}"></div>
+    </th:block>
+</main>
+
+<footer><div class="wrap">Спорт ЧелГУ</div></footer>
+</body>
+</html>

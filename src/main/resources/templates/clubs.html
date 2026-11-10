@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Кружки')}"></head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+<div th:replace="~{fragments :: hero('Кружки и секции', 'Кружки и секции')}"></div>
+
+<main class="wrap content">
+    <p class="muted" th:if="${clubs.empty}">Кружков пока нет.</p>
+
+    <div class="clubs-grid">
+        <a class="card" th:each="c : ${clubs}" th:href="@{/clubs/{id}(id=${c.id})}">
+            <div class="thumb"></div>
+            <div class="card-body">
+                <h3 th:text="${c.name}"></h3>
+                <p th:text="${#strings.abbreviate(c.description, 300)}"></p>
+                <p class="small" th:if="${c.updatedAt != null}">Обновлено: <span th:text="${#temporals.format(c.updatedAt, 'dd.MM.yyyy')}"></span></p>
+                <div class="card-link-text">Подробнее →</div>
+            </div>
+        </a>
+    </div>
+
+    <p class="pager" th:if="${totalPages > 1}">
+        <a th:if="${page > 1}" th:href="@{/clubs(page=${page - 1})}">← Назад</a>
+        <span th:each="p : ${#numbers.sequence(1, totalPages)}">
+            <b th:if="${p == page}" th:text="${p}"></b>
+            <a th:unless="${p == page}" th:href="@{/clubs(page=${p})}" th:text="${p}"></a>
+        </span>
+        <a th:if="${page < totalPages}" th:href="@{/clubs(page=${page + 1})}">Вперёд →</a>
+    </p>
+</main>
+
+<footer><div class="wrap">Спорт ЧелГУ</div></footer>
+</body>
+</html>

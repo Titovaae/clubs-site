@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Мероприятие')}"></head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+<div th:replace="~{fragments :: hero('Кабинет организатора', ${event.id == null ? 'Новое мероприятие' : 'Изменить мероприятие'})}"></div>
+<main class="wrap content">
+    <p class="muted">Поля со звёздочкой (*) обязательны, остальные можно оставить пустыми.</p>
+    <form class="form-card wide" th:action="@{/organizer/events}" th:object="${event}" method="post">
+        <input type="hidden" th:field="*{id}">
+
+        <label for="name">Название *</label>
+        <input type="text" id="name" th:field="*{name}" maxlength="150">
+        <div class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+
+        <label for="clubId">Кружок</label>
+        <select id="clubId" name="clubId">
+            <option value="">— без кружка —</option>
+            <option th:each="c : ${myClubs}" th:value="${c.id}" th:text="${c.name}"
+                    th:selected="${selectedClubId != null and selectedClubId == c.id}"></option>
+        </select>
+        <p class="small" style="margin:-12px 0 16px">Студенты, следящие за кружком, автоматически получат уведомление о новом мероприятии (при создании).</p>
+
+        <label for="description">Описание *</label>
+        <textarea id="description" th:field="*{description}" maxlength="2000"></textarea>
+        <div class="error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
+
+        <label for="eventDate">Дата *</label>
+        <input type="date" id="eventDate" th:field="*{eventDate}">
+        <div class="error" th:if="${#fields.hasErrors('eventDate')}" th:errors="*{eventDate}"></div>
+
+        <label for="eventTime">Время *</label>
+        <input type="time" id="eventTime" th:field="*{eventTime}">
+        <div class="error" th:if="${#fields.hasErrors('eventTime')}" th:errors="*{eventTime}"></div>
+
+        <label for="requirements">Требования</label>
+        <textarea id="requirements" th:field="*{requirements}" maxlength="2000"></textarea>
+        <div class="error" th:if="${#fields.hasErrors('requirements')}" th:errors="*{requirements}"></div>
+
+        <label for="place">Место *</label>
+        <input type="text" id="place" th:field="*{place}" maxlength="255">
+        <div class="error" th:if="${#fields.hasErrors('place')}" th:errors="*{place}"></div>
+
+        <label for="contacts">Контакты</label>
+        <input type="text" id="contacts" th:field="*{contacts}" maxlength="255">
+        <div class="error" th:if="${#fields.hasErrors('contacts')}" th:errors="*{contacts}"></div>
+
+        <div class="form-actions"><button type="submit" class="btn">Сохранить</button><a class="btn secondary" th:href="@{/organizer}">Отмена</a></div>
+    </form>
+</main>
+<footer><div class="wrap">Спорт ЧелГУ</div></footer>
+</body>
+</html>
