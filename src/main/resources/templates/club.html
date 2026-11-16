@@ -27,9 +27,21 @@
                     <li th:each="s : ${club.sessions}"><span th:text="${s.dayTitle}"></span>, <span th:text="${s.timeRange}"></span></li>
                 </ul>
             </div>
-            <p><b>Организатор:</b> <span th:text="${club.owner.fullName}"></span></p>
+            <!-- Место проведения оставляем обычным текстом -->
             <p th:if="${club.place}"><b>Место:</b> <span th:text="${club.place}"></span></p>
-            <p th:if="${club.owner.contacts}"><b>Контакты:</b> <span th:text="${club.owner.contacts}"></span></p>
+
+            <!-- А вот организатора оформляем красивой карточкой -->
+            <div class="organizer-card">
+                <!-- Круглая аватарка (заглушка с первой буквой ФИО) -->
+                <div class="organizer-avatar" th:text="${#strings.substring(club.owner.fullName, 0, 1)}"></div>
+
+                <!-- Информация об организаторе -->
+                <div class="organizer-info">
+                    <span class="organizer-label">Ответственный</span>
+                    <span class="organizer-name" th:text="${club.owner.fullName}"></span>
+                    <span class="organizer-contacts" th:if="${club.owner.contacts}" th:text="${club.owner.contacts}"></span>
+                </div>
+            </div>
 
             <div class="apply">
                 <p class="muted" sec:authorize="!isAuthenticated()">

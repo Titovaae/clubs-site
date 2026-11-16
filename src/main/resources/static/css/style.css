@@ -281,3 +281,62 @@ a.notice:hover { transform: translateX(5px); border-left-color: var(--primary-re
 .hidden {
     display: none !important;
 }
+
+
+/* =========================================
+   КАРТОЧКА ОРГАНИЗАТОРА (Заготовка под фото)
+   ========================================= */
+.organizer-card {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background-color: #F8F9FA; /* Светло-серый фон блока */
+    padding: 15px 20px;
+    border-radius: var(--border-radius);
+    margin: 20px 0;
+    border: 1px solid #E5E7EB;
+}
+
+/* Круглая аватарка-заглушка */
+.organizer-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%; /* Делает круг */
+    background-color: var(--chelgu-purple);
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    flex-shrink: 0;
+    border: 3px solid var(--chelgu-orange); /* Оранжевая обводка */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Текстовая часть */
+.organizer-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.organizer-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+.organizer-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--chelgu-purple);
+}
+
+.organizer-contacts {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-top: 4px;
+}

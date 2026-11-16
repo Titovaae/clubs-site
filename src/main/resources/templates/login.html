@@ -14,7 +14,8 @@
 </div>
 
 <div class="auth-wrapper">
-    <form th:action="@{/login}" method="post">
+    <!-- ВОТ ЗДЕСЬ ДОБАВЛЕН class="form-card" -->
+    <form class="form-card" th:action="@{/login}" method="post">
 
         <div th:if="${param.error}" class="error block">
             Неверный логин или пароль.
@@ -30,16 +31,15 @@
 
         <div>
             <label for="username">Логин</label>
-            <!-- Обычный input с name="username", без th:field -->
             <input type="text" id="username" name="username" placeholder="Введите ваш логин" required autofocus>
         </div>
 
         <div>
             <label for="password">Пароль</label>
             <div class="password-wrapper">
-                <!-- Обычный input с name="password", без th:field -->
                 <input type="password" id="password" name="password" placeholder="Введите ваш пароль" required>
 
+                <!-- Глазик -->
                 <span class="toggle-password" onclick="togglePassword('password')">
                     <svg class="icon-eye" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
