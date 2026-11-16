@@ -13,7 +13,7 @@
             <div class="thumb"></div>
             <div class="card-body">
                 <h3 th:text="${c.name}"></h3>
-                <p th:text="${#strings.abbreviate(c.description, 300)}"></p>
+                <p th:text="${#strings.abbreviate(c.description, 100)}"></p>
                 <p class="small" th:if="${c.updatedAt != null}">Обновлено: <span th:text="${#temporals.format(c.updatedAt, 'dd.MM.yyyy')}"></span></p>
                 <div class="card-link-text">Подробнее →</div>
             </div>
