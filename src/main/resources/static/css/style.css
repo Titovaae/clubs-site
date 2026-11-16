@@ -1,7 +1,3 @@
-/* =========================================
-   Стиль перенесён из проекта clubs-site-master (фиолетово-оранжевая тема ЧелГУ)
-   и дополнен стилями для страниц текущего проекта
-   ========================================= */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
@@ -270,3 +266,18 @@ a.plain:hover { color: var(--chelgu-orange); }
 a.notice:hover { transform: translateX(5px); border-left-color: var(--primary-red); }
 .notice h3 { margin: 4px 0 8px; color: var(--chelgu-purple); }
 .notice p { margin: 4px 0; }
+
+.toggle-password svg {
+    width: 20px;
+    height: 20px;
+    color: var(--text-muted);
+    transition: color 0.2s;
+}
+
+.toggle-password:hover svg {
+    color: var(--chelgu-purple); /* При наведении иконка становится фиолетовой */
+}
+
+.hidden {
+    display: none !important;
+}
