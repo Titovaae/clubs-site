@@ -24,7 +24,7 @@
             <a sec:authorize="!isAuthenticated()" th:href="@{/register}" class="nav-btn btn-primary">Регистрация</a>
 
             <span sec:authorize="isAuthenticated()" class="nav-user">
-                 <span class="nav-name">👤 <span sec:authentication="name"></span></span>
+                <span class="nav-name" sec:authentication="name"></span>
                 <form class="inline" th:action="@{/logout}" method="post">
                     <button type="submit" class="nav-btn btn-outline">Выйти</button>
                 </form>

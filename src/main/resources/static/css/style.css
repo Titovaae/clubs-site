@@ -61,20 +61,23 @@ nav {
 .btn-primary:hover { background: var(--primary-red); }
 .nav-user { display: flex; align-items: center; gap: 10px; margin-left: 8px; }
 .nav-name {
-    /* Делаем красивую "таблетку" для имени */
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    padding: 6px 14px;
-    background: rgba(255, 255, 255, 0.1); /* Легкий фон */
+    padding: 6px 16px;
+    background: rgba(0, 0, 0, 0.2);
     border-radius: 40px;
-
-    /* НАСТРОЙКА ЦВЕТА */
-    color: #FFB3C6; /* Нежно-розовый цвет */
+    color: #E2D9F3;
     font-weight: 600;
     font-size: 0.9rem;
     transition: all 0.3s ease;
     cursor: default;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.nav-name:hover {
+    background: rgba(0, 0, 0, 0.4);
+    color: var(--white); /* При наведении становится чисто белым */
+    border-color: rgba(255, 255, 255, 0.3);
 }
 
 /* Эффект при наведении на имя */
