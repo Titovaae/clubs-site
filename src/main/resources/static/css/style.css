@@ -60,7 +60,29 @@ nav {
 .btn-primary { background: var(--chelgu-orange); }
 .btn-primary:hover { background: var(--primary-red); }
 .nav-user { display: flex; align-items: center; gap: 10px; margin-left: 8px; }
-.nav-name { color: rgba(255, 255, 255, 0.75); font-size: 0.9rem; }
+.nav-name {
+    /* Делаем красивую "таблетку" для имени */
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    background: rgba(255, 255, 255, 0.1); /* Легкий фон */
+    border-radius: 40px;
+
+    /* НАСТРОЙКА ЦВЕТА */
+    color: #FFB3C6; /* Нежно-розовый цвет */
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    cursor: default;
+}
+
+/* Эффект при наведении на имя */
+.nav-name:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: var(--chelgu-orange); /* При наведении становится оранжевым */
+    box-shadow: 0 0 10px rgba(255, 179, 198, 0.3); /* Легкое свечение */
+}
 form.inline { display: inline; margin: 0; padding: 0; background: none; box-shadow: none; border: 0; }
 
 /* ---------- Заголовочный блок ---------- */
