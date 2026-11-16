@@ -9,7 +9,10 @@
 <body>
 <header th:fragment="header">
     <div class="wrap header-top">
-        <a class="title" th:href="@{/}">ЧелГУ: Спорт и Кружки</a>
+        <a class="title" th:href="@{/}">
+            <img th:src="@{/images/logo.png}" alt="Логотип ЧелГУ" class="header-logo">
+            <span>ЧелГУ: Спорт и Кружки</span>
+        </a>
         <nav>
             <a th:href="@{/}" class="nav-btn btn-main">Мероприятия</a>
             <a th:href="@{/clubs}" class="nav-btn btn-main">Кружки</a>

@@ -42,8 +42,23 @@ header { background-color: var(--chelgu-purple); color: var(--white); }
     border-bottom: 1px solid rgba(255, 255, 255, 0.15);
     gap: 15px; flex-wrap: wrap;
 }
-.header-top .title { font-size: 1.4rem; font-weight: 700; letter-spacing: 0.5px; color: var(--white); text-decoration: none; }
+.header-top .title {
+    display: flex;
+    align-items: center; /* Выравниваем по центру по вертикали */
+    gap: 12px; /* Отступ между логотипом и текстом */
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: var(--white);
+    text-decoration: none;
+}
 
+/* Настройки для самой картинки логотипа */
+.header-logo {
+    height: 40px; /* Высота логотипа (можно подогнать под текст) */
+    width: auto; /* Ширина подстроится автоматически */
+    display: block;
+}
 nav {
     display: flex; align-items: center; gap: 5px; flex-wrap: wrap;
     background: rgba(255, 255, 255, 0.08); padding: 5px; border-radius: 50px;
@@ -60,25 +75,8 @@ nav {
 .btn-primary { background: var(--chelgu-orange); }
 .btn-primary:hover { background: var(--primary-red); }
 .nav-user { display: flex; align-items: center; gap: 10px; margin-left: 8px; }
-.nav-name {
-    display: inline-flex;
-    align-items: center;
-    padding: 6px 16px;
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 40px;
-    color: #E2D9F3;
-    font-weight: 600;
-    font-size: 0.9rem;
-    transition: all 0.3s ease;
-    cursor: default;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.nav-name:hover {
-    background: rgba(0, 0, 0, 0.4);
-    color: var(--white); /* При наведении становится чисто белым */
-    border-color: rgba(255, 255, 255, 0.3);
-}
+.nav-name { color: rgba(255, 255, 255); font-size: 0.9rem; }
+form.inline { display: inline; margin: 0; padding: 0; background: none; box-shadow: none; border: 0; }
 
 /* Эффект при наведении на имя */
 .nav-name:hover {
