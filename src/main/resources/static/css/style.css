@@ -266,16 +266,39 @@ a.plain:hover { color: var(--chelgu-orange); }
 a.notice:hover { transform: translateX(5px); border-left-color: var(--primary-red); }
 .notice h3 { margin: 4px 0 8px; color: var(--chelgu-purple); }
 .notice p { margin: 4px 0; }
+/* Обертка для поля с паролем */
+.password-wrapper {
+    position: relative;
+    width: 100%;
+    margin-bottom: 20px; /* Перенесли отступ сюда */
+}
+
+/* Поле ввода внутри обертки */
+.password-wrapper input[type="password"],
+.password-wrapper input[type="text"] {
+    width: 100%;
+    margin-bottom: 0 !important; /* Убрали отступ у самого поля, чтобы обертка была ровно по его высоте */
+    padding-right: 45px; /* Место для глазика */
+}
+
+.toggle-password {
+    position: absolute;
+    right: 15px;
+    top: 50%; /* Ровно по центру поля ввода */
+    transform: translateY(-50%);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
 
 .toggle-password svg {
     width: 20px;
     height: 20px;
     color: var(--text-muted);
-    transition: color 0.2s;
 }
 
 .toggle-password:hover svg {
-    color: var(--chelgu-purple); /* При наведении иконка становится фиолетовой */
+    color: var(--chelgu-purple);
 }
 
 .hidden {
