@@ -19,6 +19,9 @@
         <div class="club-main">
             <div class="thumb thumb-large"></div>
             <p class="small" th:if="${club.updatedAt != null}">Обновлено: <span th:text="${#temporals.format(club.updatedAt, 'dd.MM.yyyy')}"></span></p>
+            <div class="status-badge" th:classappend="${club.isRecruiting != null && club.isRecruiting ? 'status-open' : 'status-closed'}">
+                <span th:text="${club.isRecruiting != null && club.isRecruiting ? '✅ Идет набор' : '⛔ Набор закрыт'}"></span>
+            </div>
             <p class="pre" th:text="${club.description}"></p>
             <p th:if="${club.requirements}"><b>Требования:</b> <span th:text="${club.requirements}"></span></p>
             <div th:if="${!club.sessions.empty}">
@@ -49,10 +52,18 @@
                     <a th:href="@{/register}">зарегистрируйтесь</a> как студент.
                 </p>
                 <div sec:authorize="hasRole('STUDENT')">
-                    <form th:unless="${following}" th:action="@{/student/clubs/{id}/follow(id=${club.id})}" method="post">
+                    <!-- Если набор закрыт и студент еще не подписан, показываем текст -->
+                    <p th:if="${club.isRecruiting != null && !club.isRecruiting && !following}" class="muted" style="font-weight: 600; color: var(--primary-red);">
+                        К сожалению, набор в этот кружок закрыт.
+                    </p>
+
+                    <!-- Кнопка подписки (показывается только если набор открыт) -->
+                    <form th:unless="${following}" th:if="${club.isRecruiting != null && club.isRecruiting}" th:action="@{/student/clubs/{id}/follow(id=${club.id})}" method="post">
                         <button type="submit" class="btn">Следить за кружком</button>
                         <p class="small">Вы будете получать уведомления о новых мероприятиях этого кружка.</p>
                     </form>
+
+                    <!-- Кнопка отписки (показывается, если студент уже подписан) -->
                     <form th:if="${following}" th:action="@{/student/clubs/{id}/unfollow(id=${club.id})}" method="post">
                         <p class="muted">Вы следите за этим кружком и получаете уведомления о его новых мероприятиях.</p>
                         <button type="submit" class="btn secondary">Не следить</button>

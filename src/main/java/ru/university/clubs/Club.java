@@ -19,6 +19,13 @@ public class Club {
     @Size(max = 150, message = "Не более 150 символов")
     private String name;
 
+    // Статус набора: true (идет), false (закрыт)
+    @Column(nullable = false)
+    private Boolean isRecruiting = true;
+
+    public Boolean getIsRecruiting() { return isRecruiting; }
+    public void setIsRecruiting(Boolean isRecruiting) { this.isRecruiting = isRecruiting; }
+
     @NotBlank(message = "Укажите описание")
     @Size(max = 2000, message = "Не более 2000 символов")
     @Column(columnDefinition = "TEXT")
@@ -70,4 +77,6 @@ public class Club {
     public void setAutoReply(String autoReply) { this.autoReply = autoReply; }
     public boolean isAutoReplySend() { return autoReplySend; }
     public void setAutoReplySend(boolean autoReplySend) { this.autoReplySend = autoReplySend; }
+    public Boolean getRecruiting() { return isRecruiting; }
+    public void setRecruiting(Boolean recruiting) { isRecruiting = recruiting; }
 }

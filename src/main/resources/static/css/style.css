@@ -363,3 +363,31 @@ a.notice:hover { transform: translateX(5px); border-left-color: var(--primary-re
     color: var(--text-muted);
     margin-top: 4px;
 }
+
+/* =========================================
+   СТАТУС НАБОРА (Плашки)
+   ========================================= */
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 18px;
+    border-radius: 50px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    letter-spacing: 0.5px;
+}
+
+/* Зеленая плашка (Идет набор) */
+.status-open {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+/* Красная плашка (Набор закрыт) */
+.status-closed {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}

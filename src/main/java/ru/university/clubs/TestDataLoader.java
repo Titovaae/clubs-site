@@ -196,6 +196,7 @@ public class TestDataLoader implements CommandLineRunner {
         // c.setAutoReply("Спасибо за заявку в кружок «" + name + "»! Приходите на ближайшую тренировку по расписанию, "
         //     + "при себе иметь спортивную форму и сменную обувь.");
         // c.setAutoReplySend(name.equals("Лёгкая атлетика"));
+        c.setIsRecruiting(true);
         clubs.save(c);
     }
 
