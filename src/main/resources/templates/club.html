@@ -20,7 +20,7 @@
             <div class="thumb thumb-large"></div>
             <p class="small" th:if="${club.updatedAt != null}">Обновлено: <span th:text="${#temporals.format(club.updatedAt, 'dd.MM.yyyy')}"></span></p>
             <div class="status-badge" th:classappend="${club.isRecruiting != null && club.isRecruiting ? 'status-open' : 'status-closed'}">
-                <span th:text="${club.isRecruiting != null && club.isRecruiting ? '✅ Идет набор' : '⛔ Набор закрыт'}"></span>
+                <span th:text="${club.isRecruiting != null && club.isRecruiting ? 'Идет набор' : 'Набор закрыт'}"></span>
             </div>
             <p class="pre" th:text="${club.description}"></p>
             <p th:if="${club.requirements}"><b>Требования:</b> <span th:text="${club.requirements}"></span></p>
